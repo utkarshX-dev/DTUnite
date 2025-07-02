@@ -10,22 +10,24 @@ import PlacementsPage from './components/placements/placements.jsx';
 
 function App() {
   return (
-    <>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Router>
         <Navbar />
-        <Routes>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/explore' element={<FeedPage />} />
-          <Route path='/results' element={<FeedPage />} />
-          <Route path='/scholarships' element={<FeedPage />} />
-          <Route path='/placement-stats' element={<PlacementsPage />} />
-          <Route path='/auth' element={<AuthPage />} />
-          <Route path='/user' element={<UserPage />} />
-        </Routes>
+        <div style={{ flex: 1 }}>
+          <Routes>
+            <Route path='/' element={<HomePage />} />
+            <Route path='/explore' element={<FeedPage />} />
+            <Route path='/results' element={<FeedPage />} />
+            <Route path='/scholarships' element={<FeedPage />} />
+            <Route path='/placement-stats' element={<PlacementsPage />} />
+            <Route path='/auth' element={<AuthPage />} />
+            <Route path='/user' element={<UserPage />} />
+          </Routes>
+        </div>
         <Footer />
       </Router>
-    </>
-  )
+    </div>
+  );
 }
 
 export default App;
