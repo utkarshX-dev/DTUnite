@@ -67,10 +67,10 @@ function Navbar() {
         flexDirection: "column",
         justifyContent: "space-between",
       }}
-      // Removed onClick and onKeyDown from here!
+    
     >
       <Box>
-        {/* Top Buttons on Mobile */}
+        
         {isMobile && (
           <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
             <Button
