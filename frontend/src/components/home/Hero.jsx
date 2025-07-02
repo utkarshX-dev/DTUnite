@@ -23,10 +23,10 @@ function Hero() {
           <div className="col-12 col-md-6 d-flex justify-content-center py-4">
             <model-viewer
               class="island"
-              src="./island.glb"
+              src="./welcome.glb"
               autoplay
+              disable-zoom
               camera-controls
-              auto-rotate
               shadow-intensity="1"
               style={{
                 width: "100%",

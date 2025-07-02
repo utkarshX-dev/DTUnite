@@ -5,6 +5,7 @@ const app = express();
 const userRoutes = require('./routes/userRoute.js');
 const postRoutes = require('./routes/postRoute.js');
 const commentRoutes = require('./routes/commentRoutes.js');
+const utilRoutes = require("./routes/utilRoutes.js");
 const path = require('path');
 const cors = require('cors');
 
@@ -13,6 +14,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/api", utilRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
