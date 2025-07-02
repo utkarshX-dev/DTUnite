@@ -1,25 +1,19 @@
-import axios from "axios";
-import PostCard from "../PostCard";
-import { useEffect, useState } from "react";
+import "../../styles/home.css";
+import { Link } from "react-router-dom";
+import QuickLinks from "./QuickLinks";
+import Campus from "./Campus";
+import Alumni from "./Alumni";
+import Hero from "./Hero";
+
 function HomePage() {
-    const [data, setData] = useState(null);
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get("http://localhost:8080/api/posts");
-                setData(response.data);
-                console.log("Data fetched successfully:", response.data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-        fetchData();
-    }, []);
-    return (
-        <div>
-            
-        </div>
-     );
+  return (
+    <div className="container-fluid">
+      <Hero />
+      <Campus />
+      <QuickLinks />
+      <Alumni />
+    </div>
+  );
 }
 
 export default HomePage;
