@@ -1,13 +1,13 @@
 import "../styles/user.css";
 
 function PostCard({
-  author,
-  comments,
-  createdAt,
+  author,//id
+  comments,//array
+  createdAt,//data
   description,
-  image,
-  likedBy,
-  dislikedBy,
+  image,//url
+  likedBy,//array
+  dislikedBy,//array
   likes,
   postId,
 }) {
