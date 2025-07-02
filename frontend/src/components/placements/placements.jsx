@@ -55,7 +55,7 @@ export default function PlacementsPage() {
 
   return (
     <div className="container py-4">
-      <h2 className="mb-4 fw-bold">Placement Results</h2>
+      <h2 className="mb-4 fw-bold">Placement Stats</h2>
       <div className="mb-3 d-flex gap-3 align-items-center">
         <label className="fw-bold">Select Year:</label>
         <select
