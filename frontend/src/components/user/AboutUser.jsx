@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { UserContext } from "../../context/UserContext";
+import { UserContext } from "../contexts/userContext";
 import UserPosts from "../PostCard"; 
 import { Skeleton } from "@mui/material";
 import axios from "axios";

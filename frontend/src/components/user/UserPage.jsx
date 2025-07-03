@@ -17,7 +17,7 @@ import {
   Grid,
   useMediaQuery,
 } from "@mui/material";
-import { UserContext } from "../../context/UserContext";
+import { UserContext } from "../contexts/userContext.jsx";
 import AboutUser from "./aboutUser.jsx";
 import { useTheme } from "@mui/material/styles";
 

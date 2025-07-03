@@ -1,5 +1,5 @@
 import './App.css'
-import { UserProvider } from './context/userContext.jsx';
+import { UserProvider } from './components/contexts/userContext.jsx';
 import HomePage from './components/home/HomePage.jsx';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';

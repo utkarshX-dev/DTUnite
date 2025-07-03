@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { UserContext } from "../../context/UserContext";
+import { UserContext } from "../contexts/userContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Snackbar, Alert } from "@mui/material";

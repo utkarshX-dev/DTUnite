@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, TextField} from "@mui/material";
 import axios from "axios";
-import { UserContext } from "../../context/UserContext";
+import { UserContext } from "../contexts/userContext";
 
 function AuthPage() {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ function AuthPage() {
       });
       setOtpSent(true);
       setEmailForOtp(formDetails.email);
-      setMsg("OTP sent to your email.");
+      setMsg("OTP sent to " + formDetails.email + ". Please check your inbox.");
     } catch (error) {
       setErr(error?.response?.data?.message || "Failed to send OTP.");
     }

@@ -27,13 +27,10 @@ export default function Recruiters() {
           <img src="/recruiters/recruiter10.svg" alt="Recruiter 10" className="recruiter-logo" />
         </div>
         <div className="text-center my-5">
-          <h2 className="fw-bold" style={{ color: "#1976d2", letterSpacing: 1 }}>Ready to Unite?</h2>
-          <div className="text-muted mt-2" style={{ fontSize: "1.15rem" }}>
-            DTU Unite is more than a platform. It's a community.<br />
+          <h2 className="fw-bold mb-2" style={{ color: "#1976d2", letterSpacing: 1 }}>Ready to Unite?</h2>
             <span style={{ color: "#E03D00" }}>
               Connect. Collaborate. Create your journey.
             </span>
-          </div>
           <div className="mt-2">
             <span style={{ color: "#1976d2", fontWeight: 600 }}>
               See you on campus!❤️

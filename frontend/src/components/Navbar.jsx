@@ -27,9 +27,9 @@ import FeedbackIcon from "@mui/icons-material/Feedback";
 import GroupsIcon from "@mui/icons-material/Groups";
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import Avatar from "@mui/material/Avatar";
-import possibleAvatar from "./user/Avatar.js"; 
 
-import { UserContext } from "../context/userContext.jsx"; 
+
+import { UserContext } from "./contexts/userContext.jsx"; 
 
 function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -37,7 +37,7 @@ function Navbar() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const toggleDrawer = (open) => (event) => {
     if (
