@@ -6,24 +6,35 @@ import Avatar from "@mui/material/Avatar";
 import { deepOrange } from "@mui/material/colors";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import PostCard from "../PostCard";
 import EditIcon from "@mui/icons-material/Edit";
-import { Skeleton } from "@mui/material";
+import {
+  Skeleton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Grid,
+  useMediaQuery,
+} from "@mui/material";
 import { UserContext } from "../../context/UserContext";
+import AboutUser from "./aboutUser.jsx";
+import { useTheme } from "@mui/material/styles";
 
 function UserPage() {
   const [userAvatar, setUserAvatar] = useState("");
-  const [showAvatarPicker, setShowAvatarPicker] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMsg, setSnackbarMsg] = useState(
-    "Avatar updated successfully!"
-  );
+  const [snackbarMsg, setSnackbarMsg] = useState("Avatar updated successfully!");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [openAvatarDialog, setOpenAvatarDialog] = useState(false);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
     setLoading(true);
@@ -55,7 +66,7 @@ function UserPage() {
       );
       setUserAvatar(src);
       setUser((prev) => ({ ...prev, avatar: src }));
-      setShowAvatarPicker(false);
+      setOpenAvatarDialog(false);
       setSnackbarMsg("Avatar updated successfully!");
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
@@ -67,21 +78,14 @@ function UserPage() {
   };
 
   const handleDeleteAccount = async () => {
-    if (
-      !window.confirm(
-        "Are you sure you want to delete your account permanently? This action cannot be undone."
-      )
-    )
-      return;
     setDeleting(true);
     try {
-      const res = await axios.delete("http://localhost:8080/api/user/delete", {
+      await axios.delete("http://localhost:8080/api/user/delete", {
         headers: { Authorization: token },
       });
       localStorage.removeItem("token");
       setUser(null);
       setUserAvatar("");
-      setShowAvatarPicker(false);
       setTimeout(() => {
         navigate("/auth");
         window.location.reload();
@@ -92,6 +96,7 @@ function UserPage() {
       setSnackbarOpen(true);
     }
     setDeleting(false);
+    setOpenDeleteDialog(false);
   };
 
   const handleSnackbarClose = (_, reason) => {
@@ -139,182 +144,280 @@ function UserPage() {
 
   return (
     <div className="container" style={{ minHeight: "100vh" }}>
-      <div className="row p-5">
-        <div className="col-lg-6 col-md-5 col-12 d-flex flex-column align-items-center gap-2">
-          {loading ? (
-            <>
-              <Skeleton variant="circular" width={56} height={56} />
-              <Skeleton
-                variant="rectangular"
-                width={120}
-                height={32}
-                sx={{ borderRadius: 2, mt: 2 }}
-              />
-              <Skeleton
-                variant="text"
-                width={100}
-                sx={{ fontSize: "2rem", mt: 2 }}
-              />
-            </>
-          ) : (
-            <>
-              {user.avatar && user.avatar.startsWith("/avatars/") ? (
-                <Avatar
-                  src={user.avatar}
-                  sx={{ width: 56, height: 56 }}
-                  alt={user.username}
+      {isMobile ? (
+        <Grid container spacing={2} direction="column" alignItems="center" sx={{ pt: 3 }}>
+          
+          <Grid item xs={12} sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            {loading ? (
+              <>
+                <Skeleton variant="circular" width={56} height={56} />
+                <Skeleton
+                  variant="rectangular"
+                  width={120}
+                  height={32}
+                  sx={{ borderRadius: 2, mt: 2 }}
                 />
-              ) : (
-                <Avatar
-                  sx={{ bgcolor: deepOrange[500], width: 56, height: 56 }}
-                  alt={user.username}
+                <Skeleton
+                  variant="text"
+                  width={100}
+                  sx={{ fontSize: "2rem", mt: 2 }}
+                />
+              </>
+            ) : (
+              <>
+                {user.avatar && user.avatar.startsWith("/avatars/") ? (
+                  <Avatar
+                    src={user.avatar}
+                    sx={{ width: 56, height: 56 }}
+                    alt={user.username}
+                  />
+                ) : (
+                  <Avatar
+                    sx={{ bgcolor: deepOrange[500], width: 56, height: 56 }}
+                    alt={user.username}
+                  >
+                    {user.username[0].toUpperCase()}
+                  </Avatar>
+                )}
+                <button
+                  className="btn btn-outline-primary btn-sm mt-2 d-flex align-items-center gap-1"
+                  onClick={() => setOpenAvatarDialog(true)}
+                  style={{ width: "fit-content" }}
                 >
-                  {user.username[0].toUpperCase()}
-                </Avatar>
-              )}
-              <button
-                className="btn btn-outline-primary btn-sm mt-2 d-flex align-items-center gap-1"
-                onClick={() => setShowAvatarPicker((v) => !v)}
-                style={{ width: "fit-content" }}
-              >
-                <EditIcon fontSize="small" />
-                Change Avatar
-              </button>
-              <span className="fs-4 fw-bold mt-2">
-                {user.username.charAt(0).toUpperCase() + user.username.slice(1)}
-              </span>
-            </>
-          )}
-        </div>
-
-        <div className="col-lg-6 mt-4 col-md-5 col-12 d-flex flex-column align-items-end">
-          {loading ? (
-            <>
-              <Skeleton
-                variant="text"
-                width={180}
-                sx={{ fontSize: "1.2rem", mb: 1 }}
-              />
-              <Skeleton
-                variant="text"
-                width={140}
-                sx={{ fontSize: "1.2rem", mb: 2 }}
-              />
-              <Skeleton
-                variant="rectangular"
-                width={100}
-                height={36}
-                sx={{ borderRadius: 2 }}
-              />
-            </>
-          ) : (
-            <>
-              <span className="fs-6 text-muted">Email: {user.email}</span>
-              <span className="fs-6 text-muted">
-                Joined on:{" "}
-                {loading
-                  ? ""
-                  : new Date(user.createdAt).toLocaleDateString("en-IN", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}
-              </span>
-              <button
-                className="btn btn-danger mt-3"
-                onClick={() => {
-                  localStorage.removeItem("token");
-                  setUser(null);
-                  setUserAvatar("");
-                  setShowAvatarPicker(false);
-                  navigate("/auth");
-                  window.location.reload();
-                }}
-              >
-                Logout
-              </button>
-              <button
-                className="btn btn-outline-danger mt-2"
-                style={{ fontWeight: 500 }}
-                onClick={handleDeleteAccount}
-                disabled={deleting}
-              >
-                {deleting ? "Deleting..." : "Delete Account"}
-              </button>
-            </>
-          )}
-        </div>
-      </div>
-
-      {showAvatarPicker && !loading && (
-        <div className="row mb-4">
-          <div className="col-12 d-flex flex-wrap justify-content-center gap-3">
-            {Object.values(possibleAvatar).map((src, idx) => (
-              <img
-                key={idx}
-                src={src}
-                alt={`avatar${idx}`}
-                style={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: "50%",
-                  border:
-                    userAvatar === src ? "3px solid #1976d2" : "2px solid #ccc",
-                  cursor: "pointer",
-                  objectFit: "cover",
-                  transition: "border 0.2s",
-                }}
-                onClick={() => handleAvatarChange(src)}
-              />
-            ))}
-          </div>
-        </div>
-      )}
-
-      <h1 className="text-center mt-4 mb-4 fw-bold">
-        {loading ? (
-          <Skeleton width={180} />
-        ) : (
-          `Your Posts : ${user.posts.length}`
-        )}
-      </h1>
-      {loading ? (
-        <div className="row">
-          {[1, 2].map((i) => (
-            <div className="col-12 mb-3" key={i}>
-              <Skeleton
-                variant="rectangular"
-                height={120}
-                sx={{ borderRadius: 3 }}
-              />
-            </div>
-          ))}
-        </div>
-      ) : user.posts && user.posts.length > 0 ? (
-        <div className="row">
-          {user.posts.map((post) => (
-            <div className="col-12" key={post._id}>
-              <PostCard
-                author={post.author}
-                comments={post.comments}
-                createdAt={post.createdAt}
-                description={post.description}
-                image={post.image}
-                likedBy={post.likedBy}
-                dislikedBy={post.dislikedBy}
-                likes={post.likes}
-                postId={post._id}
-              />
-            </div>
-          ))}
-        </div>
+                  <EditIcon fontSize="small" />
+                  Change Avatar
+                </button>
+                <span className="fs-4 fw-bold mt-2" style={{ wordBreak: "break-word", textAlign: "center" }}>
+                  {user.username.charAt(0).toUpperCase() + user.username.slice(1)}
+                </span>
+              </>
+            )}
+          </Grid>
+          
+          <Grid item xs={12} sx={{ width: "100%", display: "flex", justifyContent: "center", gap: 2 }}>
+            <button
+              className="btn btn-danger"
+              style={{ minWidth: 110 }}
+              onClick={() => {
+                localStorage.removeItem("token");
+                setUser(null);
+                setUserAvatar("");
+                navigate("/auth");
+                window.location.reload();
+              }}
+            >
+              Logout
+            </button>
+            <button
+              className="btn btn-outline-danger"
+              style={{ fontWeight: 500, minWidth: 110 }}
+              onClick={() => setOpenDeleteDialog(true)}
+              disabled={deleting}
+            >
+              {deleting ? "Deleting..." : "Delete Account"}
+            </button>
+          </Grid>
+         
+          <Grid item xs={12} sx={{ width: "100%", mt: 4, textAlign: "center" }}>
+            {loading ? (
+              <>
+                <Skeleton variant="text" width={180} sx={{ fontSize: "1.2rem", mb: 1 }} />
+                <Skeleton variant="text" width={140} sx={{ fontSize: "1.2rem", mb: 2 }} />
+              </>
+            ) : (
+              <>
+                <span className="fs-6 text-muted" style={{ wordBreak: "break-all", display: "block" }}>
+                  Email: {user.email}
+                </span>
+                <span className="fs-6 text-muted" style={{ display: "block" }}>
+                  Joined on:{" "}
+                  {new Date(user.createdAt).toLocaleDateString("en-IN", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </span>
+              </>
+            )}
+          </Grid>
+        </Grid>
       ) : (
-        <div className="row">
-          <div className="col-12">
-            <p className="text-muted text-center">No posts available</p>
+       
+        <div className="row p-3 p-md-5">
+          <div className="col-lg-6 col-md-5 col-12 d-flex flex-column align-items-center gap-2">
+            {loading ? (
+              <>
+                <Skeleton variant="circular" width={56} height={56} />
+                <Skeleton
+                  variant="rectangular"
+                  width={120}
+                  height={32}
+                  sx={{ borderRadius: 2, mt: 2 }}
+                />
+                <Skeleton
+                  variant="text"
+                  width={100}
+                  sx={{ fontSize: "2rem", mt: 2 }}
+                />
+              </>
+            ) : (
+              <>
+                {user.avatar && user.avatar.startsWith("/avatars/") ? (
+                  <Avatar
+                    src={user.avatar}
+                    sx={{ width: 56, height: 56 }}
+                    alt={user.username}
+                  />
+                ) : (
+                  <Avatar
+                    sx={{ bgcolor: deepOrange[500], width: 56, height: 56 }}
+                    alt={user.username}
+                  >
+                    {user.username[0].toUpperCase()}
+                  </Avatar>
+                )}
+                <button
+                  className="btn btn-outline-primary btn-sm mt-2 d-flex align-items-center gap-1"
+                  onClick={() => setOpenAvatarDialog(true)}
+                  style={{ width: "fit-content" }}
+                >
+                  <EditIcon fontSize="small" />
+                  Change Avatar
+                </button>
+                <span className="fs-4 fw-bold mt-2" style={{ wordBreak: "break-word", textAlign: "center" }}>
+                  {user.username.charAt(0).toUpperCase() + user.username.slice(1)}
+                </span>
+              </>
+            )}
+          </div>
+          <div className="col-lg-6 mt-4 col-md-5 col-12 d-flex flex-column align-items-end">
+            {loading ? (
+              <>
+                <Skeleton
+                  variant="text"
+                  width={180}
+                  sx={{ fontSize: "1.2rem", mb: 1 }}
+                />
+                <Skeleton
+                  variant="text"
+                  width={140}
+                  sx={{ fontSize: "1.2rem", mb: 2 }}
+                />
+                <Skeleton
+                  variant="rectangular"
+                  width={100}
+                  height={36}
+                  sx={{ borderRadius: 2 }}
+                />
+              </>
+            ) : (
+              <>
+                <span className="fs-6 text-muted" style={{ wordBreak: "break-all" }}>Email: {user.email}</span>
+                <span className="fs-6 text-muted">
+                  Joined on:{" "}
+                  {new Date(user.createdAt).toLocaleDateString("en-IN", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </span>
+                <button
+                  className="btn btn-danger mt-3"
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    setUser(null);
+                    setUserAvatar("");
+                    navigate("/auth");
+                    window.location.reload();
+                  }}
+                >
+                  Logout
+                </button>
+                <button
+                  className="btn btn-outline-danger mt-4"
+                  style={{ fontWeight: 500 }}
+                  onClick={() => setOpenDeleteDialog(true)}
+                  disabled={deleting}
+                >
+                  {deleting ? "Deleting..." : "Delete Account"}
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
+
+     
+      <Dialog
+        open={openAvatarDialog}
+        onClose={() => setOpenAvatarDialog(false)}
+        PaperProps={{ sx: { borderRadius: 3, minWidth: isMobile ? "90vw" : 400 } }}
+      >
+        <DialogTitle textAlign="center">Select an Avatar</DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2} justifyContent="center">
+            {Object.values(possibleAvatar).map((src, idx) => (
+              <Grid item xs={3} sm={2} md={2} key={idx}>
+                <img
+                  src={src}
+                  alt={`avatar${idx}`}
+                  style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: "50%",
+                    border:
+                      userAvatar === src
+                        ? "3px solid #1976d2"
+                        : "2px solid #ccc",
+                    cursor: "pointer",
+                    objectFit: "cover",
+                    transition: "border 0.2s",
+                  }}
+                  onClick={() => handleAvatarChange(src)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenAvatarDialog(false)} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      
+      <Dialog
+        open={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+        PaperProps={{ sx: { borderRadius: 3 } }}
+      >
+        <DialogTitle>Delete Account</DialogTitle>
+        <DialogContent>
+          <span>
+            Are you sure you want to delete your account permanently? This action cannot be undone.
+          </span>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setOpenDeleteDialog(false)}
+            color="primary"
+            disabled={deleting}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDeleteAccount}
+            color="error"
+            variant="contained"
+            disabled={deleting}
+          >
+            {deleting ? "Deleting..." : "Delete"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <AboutUser loading={loading} />
 
       <Snackbar
         open={snackbarOpen}

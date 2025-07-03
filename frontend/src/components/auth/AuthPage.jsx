@@ -1,6 +1,5 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/auth.css";
 import { Button, TextField} from "@mui/material";
 import axios from "axios";
 import { UserContext } from "../../context/UserContext";

@@ -8,10 +8,6 @@ const postSchema = new Schema({
         type: String,
         default: null,
     },
-    likes:{
-        type: Number,
-        default: 0,
-    },
     likedBy: [
         {
             type: Schema.Types.ObjectId,

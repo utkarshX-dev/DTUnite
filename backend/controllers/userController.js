@@ -36,12 +36,26 @@ const sendUserInfo = wrapAsync(async (req, res) => {
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-  const user = await User.findOne({ token }).populate("posts");
+
+  const user = await User.findOne({ token }).populate({
+    path: "posts",
+    populate: [
+      { path: "likedBy", select: "username" },
+      { path: "dislikedBy", select: "username" },
+      {
+        path: "comments",
+        populate: { path: "author", select: "username" }, 
+      },
+    ],
+  });
+
   if (!user) {
     return res.status(401).json({ message: "Unauthorized" });
   }
+
   return res.status(200).json({ user });
 });
+
 
 const login = wrapAsync(async (req, res) => {
   let { email, password } = req.body;

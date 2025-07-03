@@ -1,5 +1,6 @@
 const Post = require("../models/postModel.js");
 const User = require("../models/userModel.js");
+const Comment = require("../models/commentModel.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 
 const getPosts = wrapAsync(async (req, res) => {
@@ -66,18 +67,23 @@ const incrementLike = wrapAsync(async (req, res) => {
     return res.json({ message: "Already liked" });
   }
 
-  if (post.dislikedBy.includes(user._id)) {
-    post.dislikedBy = post.dislikedBy.filter(id => id.toString() !== userIdStr);
-    post.likes += 2;
-  } else {
-    post.likes += 1;
-  }
+
+  post.dislikedBy = post.dislikedBy.filter(id => id.toString() !== userIdStr);
+ 
   post.likedBy.push(user._id);
+
+ 
   user.likedPosts.push(postID);
   user.dislikedPosts = user.dislikedPosts.filter(id => id.toString() !== postID);
+
   await user.save();
   await post.save();
-  return res.status(200).json({ message: "Post liked", likes: post.likes });
+
+  return res.status(200).json({
+    message: "Post liked",
+    likes: post.likedBy.length,
+    dislikes: post.dislikedBy.length
+  });
 });
 
 const decrementLike = wrapAsync(async (req, res) => {
@@ -102,19 +108,23 @@ const decrementLike = wrapAsync(async (req, res) => {
     return res.json({ message: "Already disliked" });
   }
 
-  if (post.likedBy.includes(user._id)) {
-    post.likedBy = post.likedBy.filter(id => id.toString() !== userIdStr);
-    post.likes -= 2;
-  }
-  else {
-    post.likes -= 1;
-  }
+
+  post.likedBy = post.likedBy.filter(id => id.toString() !== userIdStr);
+  
+  post.dislikedBy.push(user._id);
+
+ 
   user.likedPosts = user.likedPosts.filter(id => id.toString() !== postID);
   user.dislikedPosts.push(postID);
-  post.dislikedBy.push(user._id);
+
   await user.save();
   await post.save();
-  return res.status(200).json({ message: "Post disliked", likes: post.likes });
+
+  return res.status(200).json({
+    message: "Post disliked",
+    likes: post.likedBy.length,
+    dislikes: post.dislikedBy.length
+  });
 });
 
 const deletePost = wrapAsync(async (req, res) => {
