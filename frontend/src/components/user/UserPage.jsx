@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import possibleAvatar from "./Avatar.js";
@@ -9,18 +9,18 @@ import Alert from "@mui/material/Alert";
 import PostCard from "../PostCard";
 import EditIcon from "@mui/icons-material/Edit";
 import { Skeleton } from "@mui/material";
+import { UserContext } from "../../context/UserContext";
 
 function UserPage() {
   const [userAvatar, setUserAvatar] = useState("");
-  const [user, setUser] = useState(null);
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMsg, setSnackbarMsg] = useState(
-    "Avatar updated successfully!"
-  );
+  const [snackbarMsg, setSnackbarMsg] = useState("Avatar updated successfully!");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
     setLoading(true);
@@ -31,15 +31,17 @@ function UserPage() {
         },
       })
       .then((res) => {
-        setUser(res.data.user);
-        setUserAvatar(res.data.user.avatar || "");
-        setLoading(false);
+        setTimeout(() => {
+          setUser(res.data.user);
+          setUserAvatar(res.data.user.avatar || "");
+          setLoading(false);
+        }, 1200);
       })
       .catch((err) => {
         setLoading(false);
         console.error(err);
       });
-  }, [token]);
+  }, [token, setUser]);
 
   const handleAvatarChange = async (src) => {
     try {
@@ -52,9 +54,11 @@ function UserPage() {
       setUser((prev) => ({ ...prev, avatar: src }));
       setShowAvatarPicker(false);
       setSnackbarMsg("Avatar updated successfully!");
+      setSnackbarSeverity("success");
       setSnackbarOpen(true);
     } catch (err) {
-      setSnackbarMsg("Failed to update avatar.");
+      setSnackbarMsg("Unable to change avatar. Please try again.");
+      setSnackbarSeverity("error");
       setSnackbarOpen(true);
     }
   };
@@ -164,11 +168,8 @@ function UserPage() {
                   setUser(null);
                   setUserAvatar("");
                   setShowAvatarPicker(false);
-                  setSnackbarMsg("Logged out successfully!");
-                  setSnackbarOpen(true);
-                  setTimeout(() => {
-                    navigate("/auth");
-                  }, 1200);
+                  navigate("/auth");
+                  window.location.reload();
                 }}
               >
                 Logout
@@ -247,27 +248,33 @@ function UserPage() {
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         sx={{
           "& .MuiSnackbarContent-root, & .MuiAlert-root": {
-            background: "#43a047",
+            background: snackbarSeverity === "error" ? "#d32f2f" : "#43a047",
             color: "#fff",
-            fontWeight: 600,
-            fontSize: "1.1rem",
+            fontWeight: 400,
+            fontSize: "1rem",
+            fontFamily: "Arial, sans-serif",
             boxShadow: "0 4px 16px 0 rgba(67,160,71,0.12)",
             borderRadius: "0.7rem",
-            letterSpacing: 1,
+            letterSpacing: 0.5,
+            textAlign: "center",
+            padding: "0.7rem 1.5rem",
           },
         }}
       >
         <Alert
           onClose={handleSnackbarClose}
-          severity="success"
+          severity={snackbarSeverity}
           sx={{
             width: "100%",
-            background: "#43a047",
+            background: snackbarSeverity === "error" ? "#d32f2f" : "#43a047",
             color: "#fff",
-            fontWeight: 600,
-            fontSize: "1.1rem",
+            fontWeight: 400,
+            fontSize: "1rem",
+            fontFamily: "Arial, sans-serif",
             borderRadius: "0.7rem",
-            letterSpacing: 1,
+            letterSpacing: 0.5,
+            textAlign: "center",
+            padding: "0.7rem 1.5rem",
           }}
         >
           {snackbarMsg}

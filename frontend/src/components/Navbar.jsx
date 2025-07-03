@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import {
   AppBar,
@@ -27,27 +27,17 @@ import FeedbackIcon from "@mui/icons-material/Feedback";
 import GroupsIcon from "@mui/icons-material/Groups";
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import Avatar from "@mui/material/Avatar";
-import possibleAvatar from "./user/Avatar.js"; // adjust path if needed
+import possibleAvatar from "./user/Avatar.js"; 
+
+import { UserContext } from "../context/userContext.jsx"; 
 
 function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [user, setUser] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      fetch("http://localhost:8080/api/user", {
-        headers: { Authorization: token }
-      })
-        .then(res => res.json())
-        .then(data => setUser(data.user))
-        .catch(() => setUser(null));
-    } else {
-      setUser(null);
-    }
-  }, []);
+  
+  const { user, setUser } = useContext(UserContext);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -115,7 +105,7 @@ function Navbar() {
               variant="contained"
               startIcon={<AddIcon />}
               component={Link}
-              to="/create-post"
+              to="/create"
               sx={{
                 bgcolor: "#ff4500",
                 color: "#fff",
@@ -193,7 +183,7 @@ function Navbar() {
     </Box>
   );
 
-  // Avatar logic for navbar
+
   let avatarSrc = null;
   if (user && user.avatar && user.avatar.startsWith("/avatars/")) {
     avatarSrc = user.avatar;
@@ -264,7 +254,7 @@ function Navbar() {
                 variant="contained"
                 startIcon={<AddIcon />}
                 component={Link}
-                to="/create-post"
+                to="/create"
                 sx={{
                   bgcolor: "#ff4500",
                   color: "#fff",
@@ -290,7 +280,7 @@ function Navbar() {
               />
             ) : user && user.username ? (
               <Avatar
-                sx={{ width: 32, height: 32, bgcolor: "#ff4500", fontWeight: 700, fontSize: 18 }}
+                sx={{ width: 32, height: 32, bgcolor:"#ff4500", border: "2px solid #fff", fontWeight: 400, fontSize: 18 }}
                 alt={user.username}
               >
                 {user.username[0].toUpperCase()}
