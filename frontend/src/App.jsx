@@ -9,6 +9,7 @@ import UserPage from './components/user/UserPage.jsx';
 import FeedbackPage from './components/feedback/FeebackPage.jsx';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PlacementsPage from './components/placements/placements.jsx';
+import FaqsPage from './components/faqs/FaqsPage.jsx';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path='/auth' element={<AuthPage />} />
             <Route path='/user' element={<UserPage />} />
             <Route path='/feedback' element={<FeedbackPage />} />
+            <Route path='/faqs' element={<FaqsPage />} />
           </Routes>
         </div>
         <Footer />

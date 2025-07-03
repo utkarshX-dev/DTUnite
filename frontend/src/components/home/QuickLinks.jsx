@@ -44,9 +44,9 @@ function QuickLinks() {
         <div className="col-6 col-md-3 mb-3">
           <Card
             icon="💬"
-            title="Feedback"
-            description="Share your thoughts with us."
-            to="/feedback"
+            title="Placement"
+            description="Explore latest placement statistics ."
+            to="/placement-stats"
           />
         </div>
       </div>

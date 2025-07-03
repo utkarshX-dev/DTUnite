@@ -76,3 +76,102 @@
     height: 90px;
   }
 }
+.recruiters-marquee-container {
+  overflow: hidden;
+  width: 100%;
+  margin-top: 4rem;
+}
+
+.recruiters-marquee-track {
+  display: inline-block;
+  animation: marquee 25s linear infinite;
+  min-width: 100%;
+  white-space: nowrap;
+}
+
+.recruiter-logo {
+  height: 48px;
+  margin: 0 32px;
+  max-width: 120px;
+  width: auto;
+  object-fit: contain;
+  transition: height 0.2s;
+}
+.section-underline {
+  font-weight: bolder;
+  text-decoration: underline;
+  text-decoration-color: #2563eb;
+  text-underline-offset: 0.75rem;
+  margin-top: 2.5rem;
+  font-size: 2.5rem;
+}
+@media (max-width: 768px) {
+  .recruiter-logo {
+    height: 36px;
+    margin: 0 16px;
+    max-width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .recruiter-logo {
+    height: 28px;
+    margin: 0 8px;
+    max-width: 60px;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.alumni-container {
+  padding: 3rem 1rem;
+}
+
+.alumni-heading {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #2e7d32;
+}
+
+.alumni-subtext {
+  font-size: 1.1rem;
+  color: #6c757d;
+}
+
+.alumni-card {
+  background: #ffffff;
+  border-radius: 1.5rem;
+  padding: 1.5rem 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+.alumni-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.alumni-img {
+  height: 120px;
+  width: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  border: 4px solid #e0f2f1;
+}
+
+.alumni-name {
+  font-weight: 600;
+  color: #1565c0;
+  margin-bottom: 0.5rem;
+}
+
+.alumni-desc {
+  color: #555;
+  font-size: 0.9rem;
+  min-height: 60px;
+}

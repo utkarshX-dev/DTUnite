@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import data from "./placementdata.json";
+import { Skeleton } from "@mui/material";
 
 const placements2025 = data.Sheet1.filter(item => item.Name);
 
@@ -29,11 +30,16 @@ export default function PlacementsPage() {
   const [branch, setBranch] = useState("");
   const [ctc, setCtc] = useState("");
   const [cgpa, setCgpa] = useState("");
-
+  const [loading, setLoading] = useState(false);
 
   const showNA = val => (val === undefined || val === null || val === "" ? "N/A" : val);
 
- 
+  React.useEffect(() => {
+    setLoading(true);
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, [search, sortOrder, year, branch, ctc, cgpa]);
+
   const filtered = placements2025
     .filter(p =>
       (p.Name || "").toLowerCase().includes(search.toLowerCase())
@@ -55,7 +61,7 @@ export default function PlacementsPage() {
 
   return (
     <div className="container py-4">
-      <h2 className="mb-4 fw-bold text-center mb-5 mt-5">Placement Stats</h2>
+      <h2 className="mb-4 fw-bold text-center mb-5 mt-5 text-primary">Placement Statistics {year}</h2>
       <div className="mb-3 d-flex gap-3 align-items-center">
         <label className="fw-bold">Select Year:</label>
         <select
@@ -135,20 +141,40 @@ export default function PlacementsPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((p, idx) => (
-                  <tr key={idx}>
-                    <td>{showNA(p.Name)}</td>
-                    <td>{showNA(p[" Roll No"])}</td>
-                    <td>{showNA(p.Branch)}</td>
-                    <td>{showNA(p.CGPA)}</td>
-                    <td>{showNA(p.Company)}</td>
-                    <td>{showNA(p.Role)}</td>
-                    <td>{showNA(p.CTC)}</td>
+                {loading ? (
+                  Array.from({ length: 7 }).map((_, idx) => (
+                    <tr key={idx}>
+                      <td><Skeleton variant="text" width={90} height={24} /></td>
+                      <td><Skeleton variant="text" width={70} height={24} /></td>
+                      <td><Skeleton variant="text" width={70} height={24} /></td>
+                      <td><Skeleton variant="text" width={50} height={24} /></td>
+                      <td><Skeleton variant="text" width={90} height={24} /></td>
+                      <td><Skeleton variant="text" width={70} height={24} /></td>
+                      <td><Skeleton variant="text" width={60} height={24} /></td>
+                    </tr>
+                  ))
+                ) : filtered.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="text-center text-muted py-4">
+                      No results found.
+                    </td>
                   </tr>
-                ))}
+                ) : (
+                  filtered.map((p, idx) => (
+                    <tr key={idx}>
+                      <td>{showNA(p.Name)}</td>
+                      <td>{showNA(p[" Roll No"])}</td>
+                      <td>{showNA(p.Branch)}</td>
+                      <td>{showNA(p.CGPA)}</td>
+                      <td>{showNA(p.Company)}</td>
+                      <td>{showNA(p.Role)}</td>
+                      <td>{showNA(p.CTC)}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
-            {filtered.length === 0 && (
+            {filtered.length === 0 && !loading && (
               <div className="text-muted text-center py-4">No results found.</div>
             )}
           </div>

@@ -25,6 +25,7 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import AddIcon from "@mui/icons-material/Add";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import GroupsIcon from "@mui/icons-material/Groups";
+import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 
 function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -116,7 +117,7 @@ function Navbar() {
           </Box>
         )}
 
-        {/* Menu List */}
+        
         <List>
           <ListItem button component={Link} to="/" sx={listItemStyle} onClick={toggleDrawer(false)}>
             <ListItemIcon>
@@ -154,10 +155,16 @@ function Navbar() {
             </ListItemIcon>
             <ListItemText primary="Feedback" />
           </ListItem>
+          <ListItem button component={Link} to="/faqs" sx={listItemStyle} onClick={toggleDrawer(false)}>
+            <ListItemIcon>
+              <LiveHelpIcon />
+            </ListItemIcon>
+            <ListItemText primary="FAQs" />
+          </ListItem>
         </List>
       </Box>
 
-      {/* Footer */}
+     
       <Box
         sx={{
           textAlign: "center",
