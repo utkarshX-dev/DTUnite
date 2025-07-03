@@ -6,6 +6,7 @@ const userRoutes = require('./routes/userRoute.js');
 const postRoutes = require('./routes/postRoute.js');
 const commentRoutes = require('./routes/commentRoutes.js');
 const utilRoutes = require("./routes/utilRoutes.js");
+
 const path = require('path');
 const cors = require('cors');
 

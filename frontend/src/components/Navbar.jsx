@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   AppBar,
@@ -26,11 +26,28 @@ import AddIcon from "@mui/icons-material/Add";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import GroupsIcon from "@mui/icons-material/Groups";
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
+import Avatar from "@mui/material/Avatar";
+import possibleAvatar from "./user/Avatar.js"; // adjust path if needed
 
 function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetch("http://localhost:8080/api/user", {
+        headers: { Authorization: token }
+      })
+        .then(res => res.json())
+        .then(data => setUser(data.user))
+        .catch(() => setUser(null));
+    } else {
+      setUser(null);
+    }
+  }, []);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -68,10 +85,8 @@ function Navbar() {
         flexDirection: "column",
         justifyContent: "space-between",
       }}
-    
     >
       <Box>
-        
         {isMobile && (
           <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
             <Button
@@ -117,7 +132,6 @@ function Navbar() {
           </Box>
         )}
 
-        
         <List>
           <ListItem button component={Link} to="/" sx={listItemStyle} onClick={toggleDrawer(false)}>
             <ListItemIcon>
@@ -164,7 +178,6 @@ function Navbar() {
         </List>
       </Box>
 
-     
       <Box
         sx={{
           textAlign: "center",
@@ -179,6 +192,12 @@ function Navbar() {
       </Box>
     </Box>
   );
+
+  // Avatar logic for navbar
+  let avatarSrc = null;
+  if (user && user.avatar && user.avatar.startsWith("/avatars/")) {
+    avatarSrc = user.avatar;
+  }
 
   return (
     <>
@@ -262,8 +281,23 @@ function Navbar() {
               </Button>
             </>
           )}
-          <IconButton color="inherit" component={Link} to="/user">
-            <AccountCircleIcon />
+          <IconButton color="inherit" component={Link} to="/user" sx={{ ml: 1 }}>
+            {avatarSrc ? (
+              <Avatar
+                src={avatarSrc}
+                sx={{ width: 32, height: 32, bgcolor: "#ff4500", fontWeight: 700, fontSize: 18 }}
+                alt="User"
+              />
+            ) : user && user.username ? (
+              <Avatar
+                sx={{ width: 32, height: 32, bgcolor: "#ff4500", fontWeight: 700, fontSize: 18 }}
+                alt={user.username}
+              >
+                {user.username[0].toUpperCase()}
+              </Avatar>
+            ) : (
+              <AccountCircleIcon sx={{ fontSize: 32 }} />
+            )}
           </IconButton>
         </Toolbar>
       </AppBar>
