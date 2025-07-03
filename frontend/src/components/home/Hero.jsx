@@ -11,7 +11,8 @@ function Hero() {
               <span className="highlight">DTUnite</span>
             </h1>
             <p className="lead text-muted mb-4">
-              One Stop Solution for your DTU Doubts
+              One Stop Solution for all your college needs. <br />
+              Connect with your college community, share ideas, and explore a world of opportunities.
             </p>
             <div className="d-flex d-md-block justify-content-center justify-content-md-start">
               <Link to="/explore" style={{ textDecoration: "none" }}>

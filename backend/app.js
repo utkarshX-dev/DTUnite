@@ -2,6 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
+
 const userRoutes = require('./routes/userRoute.js');
 const postRoutes = require('./routes/postRoute.js');
 const commentRoutes = require('./routes/commentRoutes.js');

@@ -4,6 +4,8 @@ const crypto = require("crypto");
 const wrapAsync = require("../utils/wrapAsync");
 const Otp = require("../models/otpModel.js");
 const nodemailer = require("nodemailer");
+const Post = require("../models/postModel");
+const Comment = require("../models/commentModel");
 
 const register = wrapAsync(async (req, res) => {
   let { username, password, email } = req.body;
@@ -68,11 +70,7 @@ const sendOtp = wrapAsync(async (req, res) => {
 
   
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-  
   await Otp.create({ email, otp, expiresAt: Date.now() + 10 * 60 * 1000 });
-
-  
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -115,4 +113,19 @@ const changeAvatar = wrapAsync(async (req, res) => {
   await user.save();
   return res.status(200).json({ message: "Avatar updated successfully" });
 });
-module.exports = { login, register, sendUserInfo, sendOtp, verifyOtp, changeAvatar };
+
+const deleteUser = wrapAsync(async (req, res) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const user = await User.findOne({ token });
+  if (!user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  await User.deleteOne({ _id: user._id });
+  await Post.deleteMany({ author: user._id });
+  await Comment.deleteMany({ author: user._id });
+  return res.status(200).json({ message: "Account deleted successfully!" });
+});
+module.exports = { login, register, sendUserInfo, sendOtp, verifyOtp, changeAvatar, deleteUser };

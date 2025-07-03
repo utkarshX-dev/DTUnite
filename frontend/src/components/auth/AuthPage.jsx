@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../styles/auth.css";
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, TextField} from "@mui/material";
 import axios from "axios";
+import { UserContext } from "../../context/UserContext";
 
 function AuthPage() {
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
   const [auth, setAuth] = useState(false);
   const [formDetails, setFormDetails] = useState({
     username: "",
@@ -83,9 +87,7 @@ function AuthPage() {
     }
     try {
       setErr("");
-      const url = `http://localhost:8080/api/user/${
-        auth ? "login" : "register"
-      }`;
+      const url = `http://localhost:8080/api/user/${auth ? "login" : "register"}`;
       const payload = auth
         ? { email, password }
         : { username, email, password };
@@ -93,7 +95,11 @@ function AuthPage() {
       if (response.status === 200) {
         if (auth) {
           localStorage.setItem("token", response.data.token);
-          window.location.href = "/";
+          const res = await axios.get("http://localhost:8080/api/user", {
+            headers: { Authorization: response.data.token }
+          });
+          setUser(res.data.user);
+          navigate("/");
         } else {
           setMsg("Registration successful! You can now log in.");
           setOtpVerified(false);
@@ -163,7 +169,7 @@ function AuthPage() {
                   <Button
                     type="button"
                     className="mt-3"
-                    variant="outlined"
+                    variant="contained"
                     color="primary"
                     fullWidth
                     onClick={handleSendOtp}

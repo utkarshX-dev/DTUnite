@@ -1,10 +1,11 @@
 const {Router} = require('express');
 const router = Router();
-const {login, register, sendUserInfo, sendOtp, verifyOtp, changeAvatar} = require('../controllers/userController.js');
+const {login, register, sendUserInfo, sendOtp, verifyOtp, changeAvatar, deleteUser} = require('../controllers/userController.js');
 router.get("/", sendUserInfo);
 router.post("/login", login);
 router.post("/register", register);
 router.post("/send-otp", sendOtp);
 router.post("/verify-otp", verifyOtp);
 router.post("/avatar", changeAvatar);
+router.delete("/delete", deleteUser);
 module.exports = router;

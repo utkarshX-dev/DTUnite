@@ -22,7 +22,7 @@ export default function WhyDtu() {
 
   return (
     <>
-      <div className="container mt-5 p-3 mb-5">
+      <div className="container mb-5">
         <div className="row flex-wrap align-items-center">
           <div className="p-4 mt-5 col-lg-6 col-12 d-flex flex-column justify-content-center align-items-center mb-4 mb-lg-0" style={{ minHeight: "100%" }}>
             <h1 className="fs-1 fw-bold text-primary">Why Dtu?</h1>

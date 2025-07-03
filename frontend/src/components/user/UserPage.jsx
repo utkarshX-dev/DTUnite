@@ -15,9 +15,12 @@ function UserPage() {
   const [userAvatar, setUserAvatar] = useState("");
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMsg, setSnackbarMsg] = useState("Avatar updated successfully!");
+  const [snackbarMsg, setSnackbarMsg] = useState(
+    "Avatar updated successfully!"
+  );
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
@@ -61,6 +64,34 @@ function UserPage() {
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
     }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete your account permanently? This action cannot be undone."
+      )
+    )
+      return;
+    setDeleting(true);
+    try {
+      const res = await axios.delete("http://localhost:8080/api/user/delete", {
+        headers: { Authorization: token },
+      });
+      localStorage.removeItem("token");
+      setUser(null);
+      setUserAvatar("");
+      setShowAvatarPicker(false);
+      setTimeout(() => {
+        navigate("/auth");
+        window.location.reload();
+      }, 1200);
+    } catch (err) {
+      setSnackbarMsg("Failed to delete account. Please try again.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+    setDeleting(false);
   };
 
   const handleSnackbarClose = (_, reason) => {
@@ -113,8 +144,17 @@ function UserPage() {
           {loading ? (
             <>
               <Skeleton variant="circular" width={56} height={56} />
-              <Skeleton variant="rectangular" width={120} height={32} sx={{ borderRadius: 2, mt: 2 }} />
-              <Skeleton variant="text" width={100} sx={{ fontSize: "2rem", mt: 2 }} />
+              <Skeleton
+                variant="rectangular"
+                width={120}
+                height={32}
+                sx={{ borderRadius: 2, mt: 2 }}
+              />
+              <Skeleton
+                variant="text"
+                width={100}
+                sx={{ fontSize: "2rem", mt: 2 }}
+              />
             </>
           ) : (
             <>
@@ -150,16 +190,35 @@ function UserPage() {
         <div className="col-lg-6 mt-4 col-md-5 col-12 d-flex flex-column align-items-end">
           {loading ? (
             <>
-              <Skeleton variant="text" width={180} sx={{ fontSize: "1.2rem", mb: 1 }} />
-              <Skeleton variant="text" width={140} sx={{ fontSize: "1.2rem", mb: 2 }} />
-              <Skeleton variant="rectangular" width={100} height={36} sx={{ borderRadius: 2 }} />
+              <Skeleton
+                variant="text"
+                width={180}
+                sx={{ fontSize: "1.2rem", mb: 1 }}
+              />
+              <Skeleton
+                variant="text"
+                width={140}
+                sx={{ fontSize: "1.2rem", mb: 2 }}
+              />
+              <Skeleton
+                variant="rectangular"
+                width={100}
+                height={36}
+                sx={{ borderRadius: 2 }}
+              />
             </>
           ) : (
             <>
               <span className="fs-6 text-muted">Email: {user.email}</span>
               <span className="fs-6 text-muted">
                 Joined on:{" "}
-                {new Date(user.createdAt).toLocaleDateString() || Date.now()}
+                {loading
+                  ? ""
+                  : new Date(user.createdAt).toLocaleDateString("en-IN", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
               </span>
               <button
                 className="btn btn-danger mt-3"
@@ -173,6 +232,14 @@ function UserPage() {
                 }}
               >
                 Logout
+              </button>
+              <button
+                className="btn btn-outline-danger mt-2"
+                style={{ fontWeight: 500 }}
+                onClick={handleDeleteAccount}
+                disabled={deleting}
+              >
+                {deleting ? "Deleting..." : "Delete Account"}
               </button>
             </>
           )}
@@ -205,13 +272,21 @@ function UserPage() {
       )}
 
       <h1 className="text-center mt-4 mb-4 fw-bold">
-        {loading ? <Skeleton width={180} /> : `Your Posts : ${user.posts.length}`}
+        {loading ? (
+          <Skeleton width={180} />
+        ) : (
+          `Your Posts : ${user.posts.length}`
+        )}
       </h1>
       {loading ? (
         <div className="row">
           {[1, 2].map((i) => (
             <div className="col-12 mb-3" key={i}>
-              <Skeleton variant="rectangular" height={120} sx={{ borderRadius: 3 }} />
+              <Skeleton
+                variant="rectangular"
+                height={120}
+                sx={{ borderRadius: 3 }}
+              />
             </div>
           ))}
         </div>
