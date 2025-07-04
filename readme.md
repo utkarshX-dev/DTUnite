@@ -133,7 +133,12 @@ Below are some highlights of the DTU Unite platform:
 <p align="center">
   <img src="screenshots/11.png" alt="Screenshot 11" width="700"/>
 </p>
-
+<p align="center">
+  <img src="screenshots/12.png" alt="Screenshot 12" width="700"/>
+</p>
+<p align="center">
+  <img src="screenshots/13.png" alt="Screenshot 13" width="700"/>
+</p>
 ---
 
 ## 🤝 Contributing

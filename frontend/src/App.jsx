@@ -13,6 +13,8 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import PlacementsPage from './components/placements/placements.jsx';
 import FaqsPage from './components/faqs/FaqsPage.jsx';
 import CreatePost from './components/feed/CreatePost.jsx';
+import ClubAndSociety from './components/Clubs_and_society/clubAndSociety.jsx';
+import ScholarshipsPage from './components/Scholarships/Scholarships.jsx';
 
 function AppWrapper() {
   return (
@@ -34,13 +36,14 @@ function App() {
             <Route path='/' element={<HomePage />} />
             <Route path='/explore' element={<FeedPage />} />
             <Route path='/results' element={<ResultPage />} />
-            <Route path='/scholarships' element={<FeedPage />} />
+            <Route path='/scholarships' element={<ScholarshipsPage />} />
             <Route path='/placement-stats' element={<PlacementsPage />} />
             <Route path='/auth' element={<AuthPage />} />
             <Route path='/user' element={<UserPage />} />
             <Route path='/feedback' element={<FeedbackPage />} />
             <Route path='/faqs' element={<FaqsPage />} />
             <Route path='/create' element={<CreatePost />} />
+            <Route path='/clubs-societies' element={<ClubAndSociety />} />
           </Routes>
         </div>
         {location.pathname === "/" ? <Footer /> : <Footer2 />}
