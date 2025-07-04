@@ -1,15 +1,14 @@
 # DTU Unite
 
-DTU Unite is a full-stack social platform built for the Delhi Technological University (DTU) community. It enables students, alumni, and faculty to connect, share, and collaborate in a secure and modern environment.
+DTU Unite is a full-stack social platform built for the Delhi Technological University (DTU) community. It enables students, alumni, and faculty to connect, share, and collaborate in a secure and modern environment. The platform also helps students get information about placements and result statistics.
 
 ---
 
 ## 🚀 Features
 
 - **Modern Authentication:** Secure sign-up/login with OTP-based email verification.
-- **Responsive UI:** Mobile-first design with light/dark mode support.
 - **Social Feed:** Create posts, like/dislike, and comment in real-time.
-- **User Profiles:** Custom avatars, profile info, and activity history.
+- **User Profiles:** Custom avatars and profile info.
 - **Feedback System:** Users can submit feedback directly from the app.
 - **Professional Email Notifications:** Clean, branded OTP and notification emails.
 - **Accessibility:** Designed for usability and accessibility.
@@ -40,11 +39,12 @@ DTU Unite is a full-stack social platform built for the Delhi Technological Univ
 - Express.js
 - MongoDB (Mongoose)
 - Nodemailer (for OTP/email)
-- JWT (for authentication)
+- Bcrypt and  (for authentication)
 
 **Other:**
 - Cloudinary (for image uploads)
-- Deployed on (add your deployment platform, e.g., Vercel/Render/Netlify)
+- Deployed Frontend on Vercel
+- Deployed Backend on Render
 
 ---
 
@@ -86,7 +86,7 @@ cd ../frontend
 npm install
 npm start
 ```
-The app will run at `http://localhost:3000`
+The app will run at `http://localhost:8080`
 
 ---
 
@@ -168,4 +168,4 @@ Please do not use or redistribute the code without permission.
 
 ---
 
-Made with ❤️ by the DTU Unite Team
+Made with ❤️ by Utkarsh Bhandari
