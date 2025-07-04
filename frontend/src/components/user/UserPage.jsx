@@ -53,7 +53,6 @@ function UserPage() {
       })
       .catch((err) => {
         setLoading(false);
-        console.error(err);
       });
   }, [token, setUser]);
 

@@ -4,6 +4,7 @@ import { Button, TextField} from "@mui/material";
 import axios from "axios";
 import { UserContext } from "../contexts/userContext";
 const apiBase = import.meta.env.VITE_API_BASE;
+
 function AuthPage() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
@@ -140,6 +141,7 @@ function AuthPage() {
                 onChange={handleFormChange}
                 fullWidth
                 margin="normal"
+                autoComplete="username"
                 required
               />
             )}
@@ -152,6 +154,7 @@ function AuthPage() {
                   onChange={handleFormChange}
                   fullWidth
                   margin="normal"
+                  autoComplete="email"
                   required
                 />
                 <TextField
@@ -162,6 +165,7 @@ function AuthPage() {
                   onChange={handleFormChange}
                   fullWidth
                   margin="normal"
+                  autoComplete="current-password"
                   required
                 />
                 {!auth && !otpVerified && (
