@@ -15,7 +15,7 @@ const thumbsUp = "/avatars/thumbs-1751537777539.png";
 const thumbsSide = "/avatars/thumbs-1751537780826.png";
 const thumbsDown = "/avatars/thumbs-1751537787548.png";
 const thumbsNeutral = "/avatars/thumbs-1751537791252.png";
-
+const hellokitty = "/avatars/hellokitty.png";
 const possibleAvatar = [
   micah,
   micahAlt,
@@ -34,6 +34,7 @@ const possibleAvatar = [
   thumbsSide,
   thumbsDown,
   thumbsNeutral,
+  hellokitty
 ];
 
 export default possibleAvatar;
