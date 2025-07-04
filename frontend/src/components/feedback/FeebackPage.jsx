@@ -19,7 +19,7 @@ function FeedbackPage() {
          e.preventDefault();
     try {
       const { name, email, feedback } = feedbackDetails;
-      const response = await axios.post("http://localhost:8080/api/feedback", {
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE}/api/feedback`, {
         name,
         email,
         feedback,
