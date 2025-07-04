@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 
-function WhatsOnMind({ userAvatar }) {
+function Mind({ userAvatar }) {
     const navigate = useNavigate();
     return (
         <div
@@ -55,4 +55,4 @@ function WhatsOnMind({ userAvatar }) {
         </div>
     );
 }
-export default WhatsOnMind;
+export default Mind;

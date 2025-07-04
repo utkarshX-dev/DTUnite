@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import WhatsOnMind from "./whatsonMind.jsx";
+import Mind from "./Mind.jsx";
 import PostCard from "../PostCard.jsx";
 
 function FeedPage() {
@@ -59,11 +59,11 @@ function FeedPage() {
       </div>
     );
   }
-
+  
   return (
     <div className="container my-5">
       <div className="col-12">
-        <WhatsOnMind userAvatar={currentUser.avatar } />
+        <Mind userAvatar={currentUser.avatar } />
       </div>
       {posts.length === 0 && (
         <div className="col-12">
