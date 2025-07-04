@@ -13,33 +13,49 @@ function FeedbackPage() {
         });
     }
    const [msg, setMsg] = useState("");
+   const [err, setErr] = useState("");
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { name, email, feedback } = feedbackDetails;
-        const response = await axios.post("http://localhost:8080/api/feedback", {
-            name,
-            email,
-            feedback
-        });
-        setFeedbackDetails({
-            name: "",
-            email: "",
-            feedback: ""
-        });
-        setMsg(()=>{
-            return response.data.message;
-        });
-        setTimeout(() => {
-            setMsg("");
-        }, 3000);
+         e.preventDefault();
+    try {
+      const { name, email, feedback } = feedbackDetails;
+      const response = await axios.post("http://localhost:8080/api/feedback", {
+        name,
+        email,
+        feedback,
+      });
+      setFeedbackDetails({
+        name: "",
+        email: "",
+        feedback: "",
+      });
+      setMsg(() => {
+        return response.data.message;
+      });
+      setTimeout(() => {
+        setMsg("");
+      }, 2000);
+    } catch (error) {
+      setErr("Failed to submit feedback. Please try again later.");
+      setFeedbackDetails({
+        name: "",
+        email: "",
+        feedback: "",
+      });
+       setTimeout(() => {
+        setErr("");
+      }, 2000);
     }
+  };
     return (
         <div className="container my-5 ">
             <h1 className="text-center text-primary fw-bold mb-4">Feedback</h1>
             {msg && <div className="alert alert-success text-center">{msg}</div>}
+            {err && <div className="alert alert-danger text-center">{err}</div>}
             <p className="text-center text-muted mb-4" style={{ fontSize: "1.15rem" }}>
                 We value your feedback! Please share your thoughts and suggestions to help us improve.
             </p>
+             
             <div className="row justify-content-center">
                 <div className="col-12 col-md-6">
                     <form onSubmit={handleSubmit}>
