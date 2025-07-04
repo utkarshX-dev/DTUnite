@@ -90,12 +90,6 @@ The app will run at `http://localhost:3000`
 
 ---
 
-## 🌐 Live Demo
-
-[Add your deployed app link here]
-
----
-
 ## 📸 Screenshots
 
 Below are some highlights of the DTU Unite platform:
