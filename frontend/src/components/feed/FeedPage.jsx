@@ -15,7 +15,7 @@ function FeedPage() {
   const fetchUser = useCallback(() => {
     setLoading(true);
     axios
-      .get("http://localhost:8080/api/user", {
+      axios.get(`${process.env.REACT_APP_API_BASE}/api/user`, {
         headers: {
           Authorization: token,
         },
@@ -32,7 +32,7 @@ function FeedPage() {
 
   const fetchPosts = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/posts");
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE}/api/posts`);
       setPosts(response.data.posts);
     } catch (error) {
       console.error("Error fetching data:", error);

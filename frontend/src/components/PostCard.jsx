@@ -1,8 +1,31 @@
 import { useState, useEffect } from "react";
 import {
-  Card, CardHeader, CardContent, CardMedia, Avatar, Typography, IconButton, Box, Divider,
-  Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemAvatar, ListItemText,
-  Button, Collapse, Menu, MenuItem, Snackbar, Alert, TextField, CircularProgress, Tooltip
+  Card,
+  CardHeader,
+  CardContent,
+  CardMedia,
+  Avatar,
+  Typography,
+  IconButton,
+  Box,
+  Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Button,
+  Collapse,
+  Menu,
+  MenuItem,
+  Snackbar,
+  Alert,
+  TextField,
+  CircularProgress,
+  Tooltip,
 } from "@mui/material";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
@@ -16,9 +39,18 @@ import axios from "axios";
 import "../styles/user.css";
 
 export default function PostCard({
-  postId, postAuthor, postDate, postImage, postDescription,
-  postComments, postLikedUsers, postDislikedUsers,
-  onPostDelete, currentUser, refreshPosts, userAvatar
+  postId,
+  postAuthor,
+  postDate,
+  postImage,
+  postDescription,
+  postComments,
+  postLikedUsers,
+  postDislikedUsers,
+  onPostDelete,
+  currentUser,
+  refreshPosts,
+  userAvatar,
 }) {
   if (!currentUser) return null;
 
@@ -32,125 +64,182 @@ export default function PostCard({
   const [commentLoading, setCommentLoading] = useState(false);
   const [comments, setComments] = useState(postComments || []);
   const [commentText, setCommentText] = useState("");
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   const token = localStorage.getItem("token");
 
-  
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
-  const [likesCount, setLikesCount] = useState(Array.isArray(postLikedUsers) ? postLikedUsers.length : 0);
-  const [dislikesCount, setDislikesCount] = useState(Array.isArray(postDislikedUsers) ? postDislikedUsers.length : 0);
+  const [likesCount, setLikesCount] = useState(
+    Array.isArray(postLikedUsers) ? postLikedUsers.length : 0
+  );
+  const [dislikesCount, setDislikesCount] = useState(
+    Array.isArray(postDislikedUsers) ? postDislikedUsers.length : 0
+  );
 
   useEffect(() => {
     setLiked(
       Array.isArray(postLikedUsers) && currentUser
-        ? postLikedUsers.some(u => u._id === currentUser._id)
+        ? postLikedUsers.some((u) => u._id === currentUser._id)
         : false
     );
     setDisliked(
       Array.isArray(postDislikedUsers) && currentUser
-        ? postDislikedUsers.some(u => u._id === currentUser._id)
+        ? postDislikedUsers.some((u) => u._id === currentUser._id)
         : false
     );
     setLikesCount(Array.isArray(postLikedUsers) ? postLikedUsers.length : 0);
-    setDislikesCount(Array.isArray(postDislikedUsers) ? postDislikedUsers.length : 0);
+    setDislikesCount(
+      Array.isArray(postDislikedUsers) ? postDislikedUsers.length : 0
+    );
   }, [postLikedUsers, postDislikedUsers, currentUser]);
 
-  const handleMenuOpen = e => setAnchorEl(e.currentTarget);
+  const handleMenuOpen = (e) => setAnchorEl(e.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
-  const handleDeleteClick = () => { setDeleteDialogOpen(true); handleMenuClose(); };
+  const handleDeleteClick = () => {
+    setDeleteDialogOpen(true);
+    handleMenuClose();
+  };
   const handleDeleteCancel = () => setDeleteDialogOpen(false);
 
   const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(`http://localhost:8080/api/posts/${postId}/delete`, { headers: { Authorization: token } });
+      await axios.delete(
+        `${process.env.REACT_APP_API_BASE}/api/posts/${postId}/delete`,
+        { headers: { Authorization: token } }
+      );
       setDeleteDialogOpen(false);
       setSnackbar({ open: true, message: "Post deleted", severity: "success" });
       if (onPostDelete) onPostDelete(postId);
       if (refreshPosts) refreshPosts();
     } catch (err) {
-      setSnackbar({ open: true, message: err?.response?.data?.message || "Failed to delete post.", severity: "error" });
+      setSnackbar({
+        open: true,
+        message: err?.response?.data?.message || "Failed to delete post.",
+        severity: "error",
+      });
       setDeleteDialogOpen(false);
     }
   };
 
   const handleLike = async () => {
-  if (likeLoading || liked) return;
-  setLikeLoading(true);
-  try {
-    const res = await axios.patch(
-      `http://localhost:8080/api/posts/${postId}/like`,
-      {},
-      { headers: { Authorization: token } }
-    );
-    setLikesCount(res.data.likes);
-    setDislikesCount(res.data.dislikes);
-    setLiked(true);
-    setDisliked(false);
-    setSnackbar({ open: true, message: "Liked the post!", severity: "success" });
-    if (typeof refreshPosts === "function") refreshPosts(); // <-- add this
-  } catch (err) {
-    setSnackbar({ open: true, message: err?.response?.data?.message || "Failed to like post.", severity: "error" });
-  } finally {
-    setLikeLoading(false);
-  }
-};
+    if (likeLoading || liked) return;
+    setLikeLoading(true);
+    try {
+      const res = await axios.patch(
+        `${process.env.REACT_APP_API_BASE}/api/posts/${postId}/like`,
+        {},
+        { headers: { Authorization: token } }
+      );
 
-const handleDislike = async () => {
-  if (dislikeLoading || disliked) return;
-  setDislikeLoading(true);
-  try {
-    const res = await axios.patch(
-      `http://localhost:8080/api/posts/${postId}/dislike`,
-      {},
-      { headers: { Authorization: token } }
-    );
-    setLikesCount(res.data.likes);
-    setDislikesCount(res.data.dislikes);
-    setDisliked(true);
-    setLiked(false);
-    setSnackbar({ open: true, message: "Disliked the post!", severity: "success" });
-    if (typeof refreshPosts === "function") refreshPosts(); // <-- add this
-  } catch (err) {
-    setSnackbar({ open: true, message: err?.response?.data?.message || "Failed to dislike post.", severity: "error" });
-  } finally {
-    setDislikeLoading(false);
-  }
-};
+      setLikesCount(res.data.likes);
+      setDislikesCount(res.data.dislikes);
+      setLiked(true);
+      setDisliked(false);
+      setSnackbar({
+        open: true,
+        message: "Liked the post!",
+        severity: "success",
+      });
+      if (typeof refreshPosts === "function") refreshPosts();
+    } catch (err) {
+      setSnackbar({
+        open: true,
+        message: err?.response?.data?.message || "Failed to like post.",
+        severity: "error",
+      });
+    } finally {
+      setLikeLoading(false);
+    }
+  };
 
-  const handleAddComment = async e => {
+  const handleDislike = async () => {
+    if (dislikeLoading || disliked) return;
+    setDislikeLoading(true);
+    try {
+      const res = await axios.patch(
+        `${process.env.REACT_APP_API_BASE}/api/posts/${postId}/dislike`,
+        {},
+        { headers: { Authorization: token } }
+      );
+      setLikesCount(res.data.likes);
+      setDislikesCount(res.data.dislikes);
+      setDisliked(true);
+      setLiked(false);
+      setSnackbar({
+        open: true,
+        message: "Disliked the post!",
+        severity: "success",
+      });
+      if (typeof refreshPosts === "function") refreshPosts();
+    } catch (err) {
+      setSnackbar({
+        open: true,
+        message: err?.response?.data?.message || "Failed to dislike post.",
+        severity: "error",
+      });
+    } finally {
+      setDislikeLoading(false);
+    }
+  };
+
+  const handleAddComment = async (e) => {
     e.preventDefault();
     if (!commentText.trim()) return;
     setCommentLoading(true);
     try {
       const res = await axios.post(
-        "http://localhost:8080/api/comments/",
+        `${process.env.REACT_APP_API_BASE}/api/comments/`,
         { postId, text: commentText },
         { headers: { Authorization: token } }
       );
-      // Ensure comment.text is present
+
       const newComment = {
         ...res.data.comment,
         text: res.data.comment.text || commentText,
-        author: { username: currentUser.username, _id: currentUser._id }
+        author: { username: currentUser.username, _id: currentUser._id },
       };
-      setComments(prev => [...prev, newComment]);
+      setComments((prev) => [...prev, newComment]);
       setCommentText("");
-      setSnackbar({ open: true, message: "Comment added", severity: "success" });
+      setSnackbar({
+        open: true,
+        message: "Comment added",
+        severity: "success",
+      });
     } catch (err) {
-      setSnackbar({ open: true, message: err?.response?.data?.message || "Failed to add comment.", severity: "error" });
+      setSnackbar({
+        open: true,
+        message: err?.response?.data?.message || "Failed to add comment.",
+        severity: "error",
+      });
     }
     setCommentLoading(false);
   };
 
-  const handleDeleteComment = async commentId => {
+  const handleDeleteComment = async (commentId) => {
     try {
-      await axios.delete(`http://localhost:8080/api/comments/${commentId}/delete`, { headers: { Authorization: token } });
-      setComments(prev => prev.filter(c => c._id !== commentId));
-      setSnackbar({ open: true, message: "Comment deleted", severity: "success" });
+      await axios.delete(
+        `${process.env.REACT_APP_API_BASE}/api/comments/${commentId}/delete`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setComments((prev) => prev.filter((c) => c._id !== commentId));
+      setSnackbar({
+        open: true,
+        message: "Comment deleted",
+        severity: "success",
+      });
     } catch (err) {
-      setSnackbar({ open: true, message: err?.response?.data?.message || "Failed to delete comment.", severity: "error" });
+      setSnackbar({
+        open: true,
+        message: err?.response?.data?.message || "Failed to delete comment.",
+        severity: "error",
+      });
     }
   };
 
@@ -161,7 +250,11 @@ const handleDislike = async () => {
           avatar={
             userAvatar ? (
               <Avatar sx={{ bgcolor: deepOrange[500] }}>
-                <img src={userAvatar} alt="User Avatar" style={{ width: "100%", height: "100%", borderRadius: "50%" }} />
+                <img
+                  src={userAvatar}
+                  alt="User Avatar"
+                  style={{ width: "100%", height: "100%", borderRadius: "50%" }}
+                />
               </Avatar>
             ) : (
               <Avatar sx={{ bgcolor: deepOrange[500] }}>
@@ -174,7 +267,11 @@ const handleDislike = async () => {
               <IconButton onClick={handleMenuOpen}>
                 <MoreVertIcon />
               </IconButton>
-              <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+              >
                 <MenuItem onClick={handleDeleteClick} sx={{ color: "#d32f2f" }}>
                   <DeleteIcon fontSize="small" sx={{ mr: 1 }} />
                   Delete Post
@@ -192,7 +289,7 @@ const handleDislike = async () => {
               {new Date(postDate).toLocaleDateString("en-IN", {
                 day: "numeric",
                 month: "long",
-                year: "numeric"
+                year: "numeric",
               })}
             </Typography>
           }
@@ -318,7 +415,7 @@ const handleDislike = async () => {
                         bgcolor: deepOrange[500],
                         width: 28,
                         height: 28,
-                        fontSize: 14
+                        fontSize: 14,
                       }}
                     >
                       <ChatBubbleOutlineIcon fontSize="small" />
@@ -377,7 +474,9 @@ const handleDislike = async () => {
                 {postLikedUsers.map((user, idx) => (
                   <ListItem key={idx}>
                     <ListItemAvatar>
-                      <Avatar sx={{ bgcolor: deepOrange[500], width: 28, height: 28 }}>
+                      <Avatar
+                        sx={{ bgcolor: deepOrange[500], width: 28, height: 28 }}
+                      >
                         {user.username?.[0]?.toUpperCase() || "U"}
                       </Avatar>
                     </ListItemAvatar>
@@ -404,7 +503,9 @@ const handleDislike = async () => {
                 {postDislikedUsers.map((user, idx) => (
                   <ListItem key={idx}>
                     <ListItemAvatar>
-                      <Avatar sx={{ bgcolor: "#d32f2f", width: 28, height: 28 }}>
+                      <Avatar
+                        sx={{ bgcolor: "#d32f2f", width: 28, height: 28 }}
+                      >
                         {user.username?.[0]?.toUpperCase()}
                       </Avatar>
                     </ListItemAvatar>
@@ -415,18 +516,27 @@ const handleDislike = async () => {
             )}
           </DialogContent>
         </Dialog>
-        <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel} PaperProps={{ sx: { borderRadius: 3 } }}>
+        <Dialog
+          open={deleteDialogOpen}
+          onClose={handleDeleteCancel}
+          PaperProps={{ sx: { borderRadius: 3 } }}
+        >
           <DialogTitle>Delete Post</DialogTitle>
           <DialogContent>
             <Typography>
-              Are you sure you want to delete this post? This action cannot be undone.
+              Are you sure you want to delete this post? This action cannot be
+              undone.
             </Typography>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleDeleteCancel} color="primary">
               Cancel
             </Button>
-            <Button onClick={handleDeleteConfirm} color="error" variant="contained">
+            <Button
+              onClick={handleDeleteConfirm}
+              color="error"
+              variant="contained"
+            >
               Delete
             </Button>
           </DialogActions>

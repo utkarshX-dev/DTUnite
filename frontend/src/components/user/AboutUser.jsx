@@ -9,7 +9,7 @@ export default function AboutUser({ loading }) {
   const { user } = useContext(UserContext);
 
   const refreshPosts = async () => {
-    const res = await axios.get("http://localhost:8080/api/posts", {
+    const res = await axios.get(`${process.env.REACT_APP_API_BASE}/api/posts`, {
       headers: { Authorization: localStorage.getItem("token") }
     });
     setPosts(res.data.posts);

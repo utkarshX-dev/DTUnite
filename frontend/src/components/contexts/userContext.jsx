@@ -13,7 +13,7 @@ export function UserProvider({ children }) {
       return;
     }
     axios
-      .get("http://localhost:8080/api/user", {
+      .get(`${process.env.REACT_APP_API_BASE}/api/user`, {
         headers: { Authorization: token },
       })
       .then((res) => setUser(res.data.user))

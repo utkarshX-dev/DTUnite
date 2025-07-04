@@ -32,7 +32,7 @@ function CreatePost() {
     formData.append("description", description);
 
     try {
-      await axios.post("http://localhost:8080/api/posts", formData, {
+   await axios.post(`${process.env.REACT_APP_API_BASE}/api/posts`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: localStorage.getItem("token"),

@@ -38,8 +38,7 @@ function UserPage() {
 
   useEffect(() => {
     setLoading(true);
-    axios
-      .get("http://localhost:8080/api/user", {
+    axios.get(`${process.env.REACT_APP_API_BASE}/api/user`, {
         headers: {
           Authorization: token,
         },
@@ -60,7 +59,7 @@ function UserPage() {
   const handleAvatarChange = async (src) => {
     try {
       await axios.post(
-        "http://localhost:8080/api/user/avatar",
+        `${process.env.REACT_APP_API_BASE}/api/user/avatar`,
         { avatar: src },
         { headers: { Authorization: token } }
       );
@@ -80,7 +79,7 @@ function UserPage() {
   const handleDeleteAccount = async () => {
     setDeleting(true);
     try {
-      await axios.delete("http://localhost:8080/api/user/delete", {
+      await axios.delete(`${process.env.REACT_APP_API_BASE}/api/user/delete`, {
         headers: { Authorization: token },
       });
       localStorage.removeItem("token");
