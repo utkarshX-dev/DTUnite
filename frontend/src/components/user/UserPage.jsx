@@ -18,7 +18,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { UserContext } from "../contexts/userContext.jsx";
-import AboutUser from "./aboutUser.jsx";
+import AboutUser from "./AboutUser.jsx";
 import { useTheme } from "@mui/material/styles";
 
 function UserPage() {
