@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+const apiBase = import.meta.env.VITE_API_BASE;
 function FeedbackPage() {
     const [feedbackDetails, setFeedbackDetails] = useState({
         name: "",
@@ -19,7 +20,7 @@ function FeedbackPage() {
          e.preventDefault();
     try {
       const { name, email, feedback } = feedbackDetails;
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE}/api/feedback`, {
+      const response = await axios.post(`${apiBase}/api/feedback`, {
         name,
         email,
         feedback,

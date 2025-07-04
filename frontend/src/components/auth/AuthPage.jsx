@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, TextField} from "@mui/material";
 import axios from "axios";
 import { UserContext } from "../contexts/userContext";
-
+const apiBase = import.meta.env.VITE_API_BASE;
 function AuthPage() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
@@ -36,7 +36,7 @@ function AuthPage() {
     try {
       setErr("");
       setMsg("");
-      await axios.post(`${process.env.REACT_APP_API_BASE}/api/user/send-otp`, {
+      await axios.post(`${apiBase}/api/user/send-otp`, {
         email: formDetails.email,
       });
       setOtpSent(true);
@@ -52,7 +52,7 @@ function AuthPage() {
     try {
       setErr("");
       setMsg("");
-        await axios.post(`${process.env.REACT_APP_API_BASE}/api/user/verify-otp`, {
+      await axios.post(`${apiBase}/api/user/verify-otp`, {
         email: emailForOtp,
         otp,
       });
@@ -86,7 +86,7 @@ function AuthPage() {
     }
     try {
       setErr("");
-      const url = `${process.env.REACT_APP_API_BASE}/api/user/${auth ? "login" : "register"}`;
+      const url = `${apiBase}/api/user/${auth ? "login" : "register"}`;
       const payload = auth
         ? { email, password }
         : { username, email, password };
@@ -94,7 +94,7 @@ function AuthPage() {
       if (response.status === 200) {
         if (auth) {
           localStorage.setItem("token", response.data.token);
-          const res = await axios.get(`${process.env.REACT_APP_API_BASE}/api/user`, {
+          const res = await axios.get(`${apiBase}/api/user`, {
             headers: { Authorization: response.data.token }
           });
           setUser(res.data.user);

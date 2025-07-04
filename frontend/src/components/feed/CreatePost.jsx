@@ -3,7 +3,7 @@ import { UserContext } from "../contexts/userContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Snackbar, Alert } from "@mui/material";
-
+const apiBase = import.meta.env.VITE_API_BASE;
 function CreatePost() {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ function CreatePost() {
     formData.append("description", description);
 
     try {
-   await axios.post(`${process.env.REACT_APP_API_BASE}/api/posts`, formData, {
+      await axios.post(`${apiBase}/api/posts`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: localStorage.getItem("token"),

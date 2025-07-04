@@ -1,3 +1,4 @@
+const apiBase = import.meta.env.VITE_API_BASE;
 import { useState, useEffect } from "react";
 import {
   Card,
@@ -109,7 +110,7 @@ export default function PostCard({
   const handleDeleteConfirm = async () => {
     try {
       await axios.delete(
-        `${process.env.REACT_APP_API_BASE}/api/posts/${postId}/delete`,
+        `${apiBase}/api/posts/${postId}/delete`,
         { headers: { Authorization: token } }
       );
       setDeleteDialogOpen(false);
@@ -131,7 +132,7 @@ export default function PostCard({
     setLikeLoading(true);
     try {
       const res = await axios.patch(
-        `${process.env.REACT_APP_API_BASE}/api/posts/${postId}/like`,
+        `${apiBase}/api/posts/${postId}/like`,
         {},
         { headers: { Authorization: token } }
       );
@@ -162,7 +163,7 @@ export default function PostCard({
     setDislikeLoading(true);
     try {
       const res = await axios.patch(
-        `${process.env.REACT_APP_API_BASE}/api/posts/${postId}/dislike`,
+        `${apiBase}/api/posts/${postId}/dislike`,
         {},
         { headers: { Authorization: token } }
       );
@@ -193,7 +194,7 @@ export default function PostCard({
     setCommentLoading(true);
     try {
       const res = await axios.post(
-        `${process.env.REACT_APP_API_BASE}/api/comments/`,
+        `${apiBase}/api/comments/`,
         { postId, text: commentText },
         { headers: { Authorization: token } }
       );
@@ -223,7 +224,7 @@ export default function PostCard({
   const handleDeleteComment = async (commentId) => {
     try {
       await axios.delete(
-        `${process.env.REACT_APP_API_BASE}/api/comments/${commentId}/delete`,
+        `${apiBase}/api/comments/${commentId}/delete`,
         {
           headers: { Authorization: token },
         }

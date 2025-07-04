@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Mind from "./Mind.jsx";
 import PostCard from "../PostCard.jsx";
-
+const apiBase = import.meta.env.VITE_API_BASE;
 function FeedPage() {
   const [posts, setPosts] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
@@ -15,7 +15,7 @@ function FeedPage() {
   const fetchUser = useCallback(() => {
     setLoading(true);
     axios
-      axios.get(`${process.env.REACT_APP_API_BASE}/api/user`, {
+      .get(`${apiBase}/api/user`, {
         headers: {
           Authorization: token,
         },
@@ -32,7 +32,7 @@ function FeedPage() {
 
   const fetchPosts = useCallback(async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE}/api/posts`);
+      const response = await axios.get(`${apiBase}/api/posts`);
       setPosts(response.data.posts);
     } catch (error) {
       console.error("Error fetching data:", error);

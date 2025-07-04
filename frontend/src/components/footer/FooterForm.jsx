@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+const apiBase = import.meta.env.VITE_API_BASE;
 import axios from "axios";
 export default function FooterForm() {
   const [feedbackDetails, setFeedbackDetails] = useState({
@@ -18,7 +19,7 @@ export default function FooterForm() {
     e.preventDefault();
     try {
       const { name, email, feedback } = feedbackDetails;
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE}/api/feedback`, {
+      const response = await axios.post(`${apiBase}/api/feedback`, {
         name,
         email,
         feedback,

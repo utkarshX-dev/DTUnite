@@ -1,3 +1,4 @@
+const apiBase = import.meta.env.VITE_API_BASE;
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/userContext";
 import UserPosts from "../PostCard";
@@ -9,7 +10,7 @@ export default function AboutUser({ loading }) {
   const { user } = useContext(UserContext);
 
   const refreshPosts = async () => {
-    const res = await axios.get(`${process.env.REACT_APP_API_BASE}/api/posts`, {
+    const res = await axios.get(`${apiBase}/api/posts`, {
       headers: { Authorization: localStorage.getItem("token") }
     });
     setPosts(res.data.posts);

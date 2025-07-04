@@ -1,3 +1,4 @@
+const apiBase = import.meta.env.VITE_API_BASE;
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -38,7 +39,7 @@ function UserPage() {
 
   useEffect(() => {
     setLoading(true);
-    axios.get(`${process.env.REACT_APP_API_BASE}/api/user`, {
+    axios.get(`${apiBase}/api/user`, {
         headers: {
           Authorization: token,
         },
@@ -59,7 +60,7 @@ function UserPage() {
   const handleAvatarChange = async (src) => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_BASE}/api/user/avatar`,
+        `${apiBase}/api/user/avatar`,
         { avatar: src },
         { headers: { Authorization: token } }
       );
@@ -79,7 +80,7 @@ function UserPage() {
   const handleDeleteAccount = async () => {
     setDeleting(true);
     try {
-      await axios.delete(`${process.env.REACT_APP_API_BASE}/api/user/delete`, {
+      await axios.delete(`${apiBase}/api/user/delete`, {
         headers: { Authorization: token },
       });
       localStorage.removeItem("token");

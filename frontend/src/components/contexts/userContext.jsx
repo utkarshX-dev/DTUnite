@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
-
+const apiBase = import.meta.env.VITE_API_BASE;
 export const UserContext = createContext();
 
 export function UserProvider({ children }) {
@@ -13,7 +13,7 @@ export function UserProvider({ children }) {
       return;
     }
     axios
-      .get(`${process.env.REACT_APP_API_BASE}/api/user`, {
+      .get(`${apiBase}/api/user`, {
         headers: { Authorization: token },
       })
       .then((res) => setUser(res.data.user))
