@@ -1,13 +1,12 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/userContext";
-import UserPosts from "../PostCard"; 
+import UserPosts from "../PostCard";
 import { Skeleton } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
-
 
 export default function AboutUser({ loading }) {
-      const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const { user } = useContext(UserContext);
 
   const refreshPosts = async () => {
     const res = await axios.get("http://localhost:8080/api/posts", {
@@ -19,8 +18,6 @@ export default function AboutUser({ loading }) {
   useEffect(() => {
     refreshPosts();
   }, []);
-  const { user } = useContext(UserContext);
-  console.log(user);
 
   if (loading || !user) {
     return (
@@ -34,7 +31,12 @@ export default function AboutUser({ loading }) {
     );
   }
 
-  if (!Array.isArray(user.posts) || user.posts.length === 0) {
+  
+  const userPosts = posts.filter(
+    (post) => post.author && post.author._id === user._id
+  );
+
+  if (userPosts.length === 0) {
     return (
       <div className="row">
         <div className="col-12">
@@ -45,22 +47,23 @@ export default function AboutUser({ loading }) {
   }
 
   return (
-
     <div className="row">
-        <div className="col-12">
-          <h1 className="fw-bold text-center text-primary mt-3">Your Posts : {user.posts.length}</h1>
-        </div>
-      {user.posts.map((post) => (
+      <div className="col-12">
+        <h1 className="fw-bold text-center text-primary mt-3">
+          Your Posts : {userPosts.length}
+        </h1>
+      </div>
+      {userPosts.map((post) => (
         <div className="col-12" key={post._id}>
           <UserPosts
             postId={post._id}
-            postAuthor={user.username} 
+            postAuthor={user.username}
             postDate={post.createdAt}
             postImage={post.image}
             postDescription={post.description}
             postComments={post.comments}
-            postLikedUsers={post.likedBy}      
-            postDislikedUsers={post.dislikedBy}  
+            postLikedUsers={post.likedBy || []}
+            postDislikedUsers={post.dislikedBy || []}
             currentUser={user}
             refreshPosts={refreshPosts}
             userAvatar={user.avatar}

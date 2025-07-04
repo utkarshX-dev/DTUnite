@@ -7,7 +7,11 @@ const getPosts = wrapAsync(async (req, res) => {
   const allPosts = await Post
     .find({})
     .populate("author", "username")
-    .populate("likedBy", "username");
+    .populate("likedBy", "username")
+    .populate({
+      path: "comments",
+      populate: { path: "author", select: "username" }
+    });
   return res.status(200).json({ message: "data fetched", posts: allPosts });
 });
 const addPost = wrapAsync(async (req, res) => {

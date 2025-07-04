@@ -45,7 +45,7 @@ function CreatePost() {
       setDescription("");
       setOpen(true);
       setTimeout(() => {
-        navigate("/");
+        navigate("/explore");
       }, 3000);
     } catch (err) {
       setMessage(err?.response?.data?.message || "Something went wrong");

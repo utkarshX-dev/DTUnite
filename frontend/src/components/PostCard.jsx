@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Card, CardHeader, CardContent, CardMedia, Avatar, Typography, IconButton, Box, Divider,
   Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemAvatar, ListItemText,
@@ -21,7 +21,7 @@ export default function PostCard({
   onPostDelete, currentUser, refreshPosts, userAvatar
 }) {
   if (!currentUser) return null;
-  
+
   const [likesOpen, setLikesOpen] = useState(false);
   const [dislikesOpen, setDislikesOpen] = useState(false);
   const [commentsOpen, setCommentsOpen] = useState(false);
@@ -35,10 +35,27 @@ export default function PostCard({
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
   const token = localStorage.getItem("token");
-  const [liked, setLiked] = useState(postLikedUsers.some(u => u._id === currentUser._id));
-  const [disliked, setDisliked] = useState(postDislikedUsers.some(u => u._id === currentUser._id));
-  const [likesCount, setLikesCount] = useState(postLikedUsers.length);
-  const [dislikesCount, setDislikesCount] = useState(postDislikedUsers.length);
+
+  
+  const [liked, setLiked] = useState(false);
+  const [disliked, setDisliked] = useState(false);
+  const [likesCount, setLikesCount] = useState(Array.isArray(postLikedUsers) ? postLikedUsers.length : 0);
+  const [dislikesCount, setDislikesCount] = useState(Array.isArray(postDislikedUsers) ? postDislikedUsers.length : 0);
+
+  useEffect(() => {
+    setLiked(
+      Array.isArray(postLikedUsers) && currentUser
+        ? postLikedUsers.some(u => u._id === currentUser._id)
+        : false
+    );
+    setDisliked(
+      Array.isArray(postDislikedUsers) && currentUser
+        ? postDislikedUsers.some(u => u._id === currentUser._id)
+        : false
+    );
+    setLikesCount(Array.isArray(postLikedUsers) ? postLikedUsers.length : 0);
+    setDislikesCount(Array.isArray(postDislikedUsers) ? postDislikedUsers.length : 0);
+  }, [postLikedUsers, postDislikedUsers, currentUser]);
 
   const handleMenuOpen = e => setAnchorEl(e.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
@@ -59,54 +76,68 @@ export default function PostCard({
   };
 
   const handleLike = async () => {
-    if (likeLoading || liked) return;
-    setLikeLoading(true);
-    try {
-      const res = await axios.patch(
-        `http://localhost:8080/api/posts/${postId}/like`,
-        {},
-        { headers: { Authorization: token } }
-      );
-      setLikesCount(res.data.likes);
-      setDislikesCount(res.data.dislikes);
-      setLiked(true);
-      setDisliked(false);
-      if (refreshPosts) refreshPosts();
-    } finally {
-      setLikeLoading(false);
-    }
-  };
+  if (likeLoading || liked) return;
+  setLikeLoading(true);
+  try {
+    const res = await axios.patch(
+      `http://localhost:8080/api/posts/${postId}/like`,
+      {},
+      { headers: { Authorization: token } }
+    );
+    setLikesCount(res.data.likes);
+    setDislikesCount(res.data.dislikes);
+    setLiked(true);
+    setDisliked(false);
+    setSnackbar({ open: true, message: "Liked the post!", severity: "success" });
+    if (typeof refreshPosts === "function") refreshPosts(); // <-- add this
+  } catch (err) {
+    setSnackbar({ open: true, message: err?.response?.data?.message || "Failed to like post.", severity: "error" });
+  } finally {
+    setLikeLoading(false);
+  }
+};
 
-  const handleDislike = async () => {
-    if (dislikeLoading || disliked) return;
-    setDislikeLoading(true);
-    try {
-      const res = await axios.patch(
-        `http://localhost:8080/api/posts/${postId}/dislike`,
-        {},
-        { headers: { Authorization: token } }
-      );
-      setLikesCount(res.data.likes);
-      setDislikesCount(res.data.dislikes);
-      setDisliked(true);
-      setLiked(false);
-      if (refreshPosts) refreshPosts();
-    } finally {
-      setDislikeLoading(false);
-    }
-  };
+const handleDislike = async () => {
+  if (dislikeLoading || disliked) return;
+  setDislikeLoading(true);
+  try {
+    const res = await axios.patch(
+      `http://localhost:8080/api/posts/${postId}/dislike`,
+      {},
+      { headers: { Authorization: token } }
+    );
+    setLikesCount(res.data.likes);
+    setDislikesCount(res.data.dislikes);
+    setDisliked(true);
+    setLiked(false);
+    setSnackbar({ open: true, message: "Disliked the post!", severity: "success" });
+    if (typeof refreshPosts === "function") refreshPosts(); // <-- add this
+  } catch (err) {
+    setSnackbar({ open: true, message: err?.response?.data?.message || "Failed to dislike post.", severity: "error" });
+  } finally {
+    setDislikeLoading(false);
+  }
+};
 
   const handleAddComment = async e => {
     e.preventDefault();
     if (!commentText.trim()) return;
     setCommentLoading(true);
     try {
-      const res = await axios.post("http://localhost:8080/api/comments/", { postId, text: commentText }, { headers: { Authorization: token } });
-      const newComment = { ...res.data.comment, author: { username: currentUser.username, _id: currentUser._id } };
+      const res = await axios.post(
+        "http://localhost:8080/api/comments/",
+        { postId, text: commentText },
+        { headers: { Authorization: token } }
+      );
+      // Ensure comment.text is present
+      const newComment = {
+        ...res.data.comment,
+        text: res.data.comment.text || commentText,
+        author: { username: currentUser.username, _id: currentUser._id }
+      };
       setComments(prev => [...prev, newComment]);
       setCommentText("");
       setSnackbar({ open: true, message: "Comment added", severity: "success" });
-      if (refreshPosts) refreshPosts();
     } catch (err) {
       setSnackbar({ open: true, message: err?.response?.data?.message || "Failed to add comment.", severity: "error" });
     }
@@ -118,7 +149,6 @@ export default function PostCard({
       await axios.delete(`http://localhost:8080/api/comments/${commentId}/delete`, { headers: { Authorization: token } });
       setComments(prev => prev.filter(c => c._id !== commentId));
       setSnackbar({ open: true, message: "Comment deleted", severity: "success" });
-      if (refreshPosts) refreshPosts();
     } catch (err) {
       setSnackbar({ open: true, message: err?.response?.data?.message || "Failed to delete comment.", severity: "error" });
     }
@@ -184,7 +214,7 @@ export default function PostCard({
           </Typography>
           <Divider sx={{ my: 1 }} />
           <Box className="postcard-actions">
-            <Tooltip title={liked ? "Like" : "Like"}>
+            <Tooltip title={liked ? "Liked" : "Like"}>
               <span>
                 <IconButton
                   size="small"
@@ -203,7 +233,7 @@ export default function PostCard({
             <Typography variant="body2" fontWeight={500}>
               {likesCount} Likes
             </Typography>
-            <Tooltip title={disliked ? "Dislike" : "Dislike"}>
+            <Tooltip title={disliked ? "Disliked" : "Dislike"}>
               <span>
                 <IconButton
                   size="small"
@@ -263,9 +293,9 @@ export default function PostCard({
               </Typography>
             )}
             <List>
-              {comments.map((comment, index) => (
+              {comments.map((comment) => (
                 <ListItem
-                  key={comment._id || index}
+                  key={comment._id}
                   alignItems="flex-start"
                   secondaryAction={
                     comment.author &&
@@ -300,7 +330,7 @@ export default function PostCard({
                         {comment.author?.username || "User"}
                       </span>
                     }
-                    secondary={comment.text}
+                    secondary={comment.text || ""}
                   />
                 </ListItem>
               ))}
@@ -385,7 +415,7 @@ export default function PostCard({
             )}
           </DialogContent>
         </Dialog>
-       <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel} PaperProps={{ sx: { borderRadius: 3 } }}>
+        <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel} PaperProps={{ sx: { borderRadius: 3 } }}>
           <DialogTitle>Delete Post</DialogTitle>
           <DialogContent>
             <Typography>

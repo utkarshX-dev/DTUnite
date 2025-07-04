@@ -1,5 +1,6 @@
 import './App.css';
 import { UserProvider } from './components/contexts/userContext.jsx';
+import PageNotFound from './components/PageNotFound.jsx';
 import HomePage from './components/home/HomePage.jsx';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/footer/Footer.jsx';
@@ -44,6 +45,7 @@ function App() {
             <Route path='/faqs' element={<FaqsPage />} />
             <Route path='/create' element={<CreatePost />} />
             <Route path='/clubs-societies' element={<ClubAndSociety />} />
+            <Route path='*' element={<PageNotFound />} />
           </Routes>
         </div>
         {location.pathname === "/" ? <Footer /> : <Footer2 />}
