@@ -14,7 +14,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import PlacementsPage from './components/placements/placements.jsx';
 import FaqsPage from './components/faqs/FaqsPage.jsx';
 import CreatePost from './components/feed/CreatePost.jsx';
-import ClubAndSociety from './components/society/clubAndSociety.jsx';
+import ClubAndSociety from "./components/society/ClubAndSociety.jsx";
 import ScholarshipsPage from './components/Scholarships/Scholarships.jsx';
 
 function AppWrapper() {
