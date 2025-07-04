@@ -1,5 +1,4 @@
 import "../../styles/home.css";
-import { Link } from "react-router-dom";
 import QuickLinks from "./QuickLinks";
 import Campus from "./Campus";
 import Alumni from "./Alumni";
@@ -35,6 +34,7 @@ function HomePage() {
       <div data-aos="fade-up" data-aos-delay="500">
         <Recruiters />
       </div>
+      
     </div>
   );
 }

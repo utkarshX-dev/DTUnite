@@ -12,10 +12,10 @@ export default function Footer() {
       >
         <div className="container-xl">
           <div className="row gy-5 align-items-start">
-            {/* Left Side Info */}
+            
             <div className="col-12 col-lg-6">
               <div className="row">
-                {/* University Info */}
+               
                 <div className="col-12 col-sm-6 mb-4 mb-sm-0">
                   <h3 className="fw-semibold">
                     Delhi Technological <br />
@@ -29,7 +29,7 @@ export default function Footer() {
                   </p>
                 </div>
 
-                {/* DTUnite Info */}
+                
                 <div
                   className="col-12 col-sm-6 mt-4 mt-sm-0"
                   style={{

@@ -18,6 +18,17 @@ DTU Unite is a full-stack social platform built for the Delhi Technological Univ
 
 ## 🛠️ Tech Stack
 
+<p align="center">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+  <img src="https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=mui&logoColor=white" />
+  <img src="https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white" />
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
+  <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" />
+  <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" />
+  <img src="https://img.shields.io/badge/Nodemailer-yellow?style=for-the-badge&logo=maildotru&logoColor=white" />
+  <img src="https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white" />
+</p>
+
 **Frontend:**
 - React.js
 - Material UI
@@ -87,13 +98,49 @@ The app will run at `http://localhost:3000`
 
 ## 📸 Screenshots
 
-_Add screenshots of your app here for better presentation!_
+Below are some highlights of the DTU Unite platform:
+
+<p align="center">
+  <img src="screenshots/1.png" alt="Screenshot 1" width="700"/>
+</p>
+<p align="center">
+  <img src="screenshots/2.png" alt="Screenshot 2" width="700"/>
+</p>
+<p align="center">
+  <img src="screenshots/3.png" alt="Screenshot 3" width="700"/>
+</p>
+<p align="center">
+  <img src="screenshots/4.png" alt="Screenshot 4" width="700"/>
+</p>
+<p align="center">
+  <img src="screenshots/5.png" alt="Screenshot 5" width="700"/>
+</p>
+<p align="center">
+  <img src="screenshots/6.png" alt="Screenshot 6" width="700"/>
+</p>
+<p align="center">
+  <img src="screenshots/7.png" alt="Screenshot 7" width="700"/>
+</p>
+<p align="center">
+  <img src="screenshots/8.png" alt="Screenshot 8" width="700"/>
+</p>
+<p align="center">
+  <img src="screenshots/9.png" alt="Screenshot 9" width="700"/>
+</p>
+<p align="center">
+  <img src="screenshots/10.png" alt="Screenshot 10" width="700"/>
+</p>
+<p align="center">
+  <img src="screenshots/11.png" alt="Screenshot 11" width="700"/>
+</p>
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request.
+This project is developed and maintained by me for the DTU community.  
+If you have suggestions or want to contribute, feel free to open an issue or contact me directly.  
+All contributions will be reviewed before acceptance.
 
 ---
 
@@ -106,7 +153,8 @@ If you accidentally commit your `.env` file, remove it from git history and chan
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is proprietary and not licensed under MIT or any open-source license.  
+Please do not use or redistribute the code without permission.
 
 ---
 
