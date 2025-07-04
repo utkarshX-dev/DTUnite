@@ -15,7 +15,7 @@ import {
   useMediaQuery
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-
+import logo from "/logo.jpg";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
@@ -210,20 +210,22 @@ function Navbar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 700,
-              letterSpacing: 1,
-              color: "#ff4500",
-              mr: 3,
-              fontFamily: "Arial, sans-serif",
-            }}
-          >
-            <Link to="/" style={{ textDecoration: "none", color: "#ff4500" }}>
-              DTUnite
+          <Box sx={{ display: "flex", alignItems: "center", mr: 3 }}>
+            <Link to="/" style={{ textDecoration: "none", color: "#ff4500", display: "flex", alignItems: "center" }}>
+              <img src={logo} alt="DTUnite Logo" style={{ height: 50, width: 50, marginRight: 8 }} />
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 700,
+                  letterSpacing: 1,
+                  color: "#ff4500",
+                  fontFamily: "Arial, sans-serif",
+                }}
+              >
+                DTUnite
+              </Typography>
             </Link>
-          </Typography>
+          </Box>
           <Box sx={{ flexGrow: 1 }} />
           {!isMobile && (
             <>
