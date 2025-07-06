@@ -1,15 +1,13 @@
-const Feedback = require('../schemas/feedbackSchema.js');
-const {Router} = require('express');
-const router = Router();
-const wrapAsync = require('../utils/wrapAsync.js');
+const { Router } = require("express");
+const multer = require("multer");
+const { storage } = require("../config/cloudinary.js");
+const upload = multer({ storage });
+const { addFeedback, addLostFound } = require("../controllers/utilControllers.js");
 
-router.post('/feedback', wrapAsync(async (req, res) => {
-    const { name, email, feedback } = req.body;
-    if (!name || !email || !feedback) {
-        return res.status(400).json({ message: "All fields are required" });
-    }
-    const newFeedback = new Feedback({ name, email, feedback });
-    await newFeedback.save();
-    res.status(201).json({ message: "Thank you for your feedback!" });
-}));
+const router = Router();
+
+router.post("/feedback", addFeedback);
+router.post("/lost-and-found", addLostFound);
+// router.post("/lost-and-found", upload.single("image"), addLostFound);
+
 module.exports = router;
