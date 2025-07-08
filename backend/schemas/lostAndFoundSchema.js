@@ -6,7 +6,6 @@ const LostAndFoundSchema = new Schema({
     location: { type: String, required: true },
     contact: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
-    expiresAt: { type: Date, default: () => Date.now() + 10 * 24 * 60 * 60 * 1000 },
-    lostAndFound: { type: Boolean, default: false }, // false for lost, true for found
+    postedBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 });
 module.exports = model('LostAndFound', LostAndFoundSchema);

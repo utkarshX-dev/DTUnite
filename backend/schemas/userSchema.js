@@ -6,11 +6,11 @@
             unique: true,
         },
         password: {
-            type: "String",
+            type: String,
             required: true,
         },
         email: {
-            type: "String",
+            type: String,
             required: true,
             unique: true,
         },
@@ -46,6 +46,12 @@
             {
                 type: Schema.Types.ObjectId,
                 ref: 'Comment'
+            }
+        ],
+        lostAndFound: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'LostAndFound'
             }
         ]
     })

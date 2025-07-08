@@ -13,6 +13,7 @@ import {
   Box,
   Button,
   useMediaQuery
+
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import logo from "/logo.jpg";
@@ -27,7 +28,7 @@ import FeedbackIcon from "@mui/icons-material/Feedback";
 import GroupsIcon from "@mui/icons-material/Groups";
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import Avatar from "@mui/material/Avatar";
-
+import SearchIcon from '@mui/icons-material/Search'
 
 import { UserContext } from "./contexts/userContext.jsx"; 
 
@@ -152,6 +153,12 @@ function Navbar() {
               <GroupsIcon />
             </ListItemIcon>
             <ListItemText primary="Clubs & Societies" />
+          </ListItem>
+          <ListItem button component={Link} to="/lost-and-found" sx={listItemStyle} onClick={toggleDrawer(false)}>
+            <ListItemIcon>
+              <SearchIcon />
+            </ListItemIcon>
+            <ListItemText primary="Lost and found" />
           </ListItem>
           <ListItem button component={Link} to="/feedback" sx={listItemStyle} onClick={toggleDrawer(false)}>
             <ListItemIcon>

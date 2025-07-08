@@ -16,6 +16,8 @@ import FaqsPage from './components/faqs/FaqsPage.jsx';
 import CreatePost from './components/feed/CreatePost.jsx';
 import ClubAndSociety from "./components/techteam/Techteam.jsx";
 import ScholarshipsPage from './components/Scholarships/Scholarships.jsx';
+import LostAndFound from './components/lostAndFound/LostAndFoundPage.jsx';
+import NewLFCreate from './components/lostAndFound/NewLFCreate.jsx';
 
 function AppWrapper() {
   return (
@@ -45,6 +47,8 @@ function App() {
             <Route path='/faqs' element={<FaqsPage />} />
             <Route path='/create' element={<CreatePost />} />
             <Route path='/clubs-societies' element={<ClubAndSociety />} />
+            <Route path='/lost-and-found' element={<LostAndFound />} />
+            <Route path='/lost-and-found/new' element={<NewLFCreate />} />
             <Route path='*' element={<PageNotFound />} />
           </Routes>
         </div>
