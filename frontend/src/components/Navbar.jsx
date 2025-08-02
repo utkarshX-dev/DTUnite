@@ -229,7 +229,7 @@ function Navbar() {
                   fontFamily: "Arial, sans-serif",
                 }}
               >
-                Deepak Sharma
+                DTUnite
               </Typography>
             </Link>
           </Box>
