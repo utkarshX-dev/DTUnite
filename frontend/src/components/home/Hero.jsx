@@ -27,7 +27,6 @@ function Hero() {
               src="./welcome.glb"
               autoplay
               disable-zoom
-              camera-controls
               shadow-intensity="1"
               style={{
                 width: "100%",
