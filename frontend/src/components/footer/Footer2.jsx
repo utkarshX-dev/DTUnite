@@ -18,7 +18,7 @@ function Footer2() {
                     . All rights reserved.
                 </span>
                 <div style={{ fontSize: "0.93rem", color: "#bdbdbd", marginTop: 4 }}>
-                    Made with <span style={{ color: "#ff5252", fontSize: "1.1em" }}>❤️</span> by the DTUnite Team
+                    Made with <span style={{ color: "#ff5252", fontSize: "1.1em" }}>❤️</span> by the Utkarsh Bhandari
                 </div>
             </div>
         </footer>

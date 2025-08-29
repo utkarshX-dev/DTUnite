@@ -75,7 +75,7 @@ export default function Footer() {
             <hr className="border-light" />
             <div className="fs-6 text-center mt-3" style={{ fontSize: "0.9rem", color: "#ddd" }}>
               © {new Date().getFullYear()}, All Rights Reserved. Made with{" "}
-              <span style={{ color: "red" }}>❤️</span> by <strong>DTUnite Team</strong>
+              <span style={{ color: "red" }}>❤️</span> by <strong>Utkarsh Bhandari</strong>
             </div>
           </div>
         </div>
