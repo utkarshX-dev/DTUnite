@@ -229,7 +229,7 @@ function Navbar() {
                   fontFamily: "Arial, sans-serif",
                 }}
               >
-                Krish
+                DTUnite
               </Typography>
             </Link>
           </Box>
