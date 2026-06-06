@@ -74,68 +74,26 @@ const login = wrapAsync(async (req, res) => {
   await existingUser.save();
   return res.status(200).json({ message: "Logged in successfully", token });
 });
-const sendOtp = wrapAsync(async (req, res) => {
-  console.log("sendOtp route hit");
-
-  const { email } = req.body;
-
-  if (!email) {
-    return res.status(400).json({
-      message: "Email is required",
-    });
-  }
-
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-  console.log("Creating OTP");
-
-  await Otp.create({
-    email,
-    otp,
-    expiresAt: Date.now() + 10 * 60 * 1000,
-  });
-
-  console.log("Creating transporter");
-
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.otp_APP_PASSWORD,
-    },
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 10000,
-  });
-
-  console.log("Verifying SMTP...");
-
-  await transporter.verify();
-
-  console.log("SMTP verified");
-
-  console.log("Sending email...");
-
-  await transporter.sendMail({
+try {
+  const info = await transporter.sendMail({
     from: process.env.EMAIL,
     to: email,
     subject: "Your DTU Unite Verification Code",
-    html: `
-      <h2>DTU Unite Verification</h2>
-      <p>Your OTP is:</p>
-      <h1>${otp}</h1>
-      <p>This OTP will expire in 10 minutes.</p>
-    `,
+    html: `<h1>${otp}</h1>`,
   });
 
-  console.log("Email sent");
+  console.log("Email sent:", info.messageId);
 
   return res.status(200).json({
     message: "OTP sent successfully",
   });
-});
+} catch (err) {
+  console.error("MAIL ERROR:", err);
+
+  return res.status(500).json({
+    message: "Failed to send OTP",
+  });
+}
 const verifyOtp = wrapAsync(async (req, res) => {
   const { email, otp } = req.body;
   const record = await Otp.findOne({ email, otp });
