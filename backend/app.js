@@ -36,11 +36,12 @@ app.get("/", (req, res) => {
 
 async function connectdb() {
   try {
-    await mongoose.connect(MONGO_URL);
     console.log("connected to database");
   } catch (error) {
-    console.log(error);
-  }
+  console.error("DB ERROR:");
+  console.error(error);
+  console.error(error.stack);
+}
 }
 connectdb();
 app.use((req, res) => {

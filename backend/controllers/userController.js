@@ -75,11 +75,17 @@ const login = wrapAsync(async (req, res) => {
   return res.status(200).json({ message: "Logged in successfully", token });
 });
 const sendOtp = wrapAsync(async (req, res) => {
+  console.log("sendOtp route hit");
+
   const { email } = req.body;
-  if (!email) return res.status(400).json({ message: "Email is required" });
 
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  console.log("Creating OTP");
   await Otp.create({ email, otp, expiresAt: Date.now() + 10 * 60 * 1000 });
+
+  console.log("Creating transporter");
+
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -88,32 +94,18 @@ const sendOtp = wrapAsync(async (req, res) => {
     },
   });
 
-  await transporter.sendMail({
-  to: email,
-  subject: "Your DTU Unite Verification Code",
-  html: `
-    <div style="font-family: Arial, sans-serif; max-width: 420px; margin: auto; border:1px solid #eee; border-radius:12px; box-shadow:0 2px 8px #eee; padding:32px 24px; background:#fafbfc;">
-      <h2 style="color:#1976d2; margin-bottom:8px; text-align:center;">DTU Unite Verification</h2>
-      <p style="font-size:1.1rem; color:#333;">Hello, Sir/Madam</p>
-      <p style="font-size:1.05rem; color:#333;">
-        Your One-Time Password (OTP) for DTU Unite is:
-      </p>
-      <div style="font-size:2rem; font-weight:bold; letter-spacing:6px; color:#1976d2; text-align:center; margin:24px 0;">
-        ${otp}
-      </div>
-      <p style="color:#555; font-size:0.98rem;">
-        This code will expire in 10 minutes. If you did not request this, please ignore this email.
-      </p>
-      <hr style="margin:24px 0; border:none; border-top:1px solid #eee;" />
-      <div style="text-align:center; color:#aaa; font-size:0.93rem;">
-        &copy; ${new Date().getFullYear()} DTU Unite
-      </div>
-    </div>
-  `,
-});
+  console.log("Sending email...");
 
-  res.json({ message: "OTP sent to your email. Email = " + email });
-});
+  await transporter.sendMail({
+    to: email,
+    subject: "Your DTU Unite Verification Code",
+    html: "test",
+  });
+
+  console.log("Email sent");
+
+  res.json({ message: "OTP sent" });
+});;
 const verifyOtp = wrapAsync(async (req, res) => {
   const { email, otp } = req.body;
   const record = await Otp.findOne({ email, otp });
