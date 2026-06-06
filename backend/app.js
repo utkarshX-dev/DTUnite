@@ -36,6 +36,7 @@ app.get("/", (req, res) => {
 
 async function connectdb() {
   try {
+    await mongoose.connect(MONGO_URL);
     console.log("connected to database");
   } catch (error) {
   console.error("DB ERROR:");
